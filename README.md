@@ -87,8 +87,7 @@ Visit http://localhost:4200 to see the frontend of the application.
 
 ## User Management Endpoints (user.js):
 - ${\color{orange}POST}$ `/user/register`: Register a new user.
-- ${\color{blue}PUT}$ `/user/:id`: Update an existing user.
-- ${\color{red}DELETE}$ `/user/:id`: Delete a user.
+- ${\color{blue}PUT}$ `/user/:id`: Update an existing user. (requires authentication)
 - ${\color{green}GET}$ `/user/`: Get a list of all users (requires admin privileges).
 - ${\color{green}GET}$ `/user/:id`: Get details of a specific user (requires authentication).
 - ${\color{orange}POST}$ `/user/login`: Authenticate and log in a user.
