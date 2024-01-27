@@ -1,0 +1,129 @@
+ @import '~primeicons/primeicons.css';
+ @import '~bootstrap/dist/css/bootstrap.min.css';
+.orangeTitle{
+    color: #EE7214
+}
+.greenButton{
+    background-color: var(--green-700);
+    border: none
+}
+
+.active{
+    color: #EE7214;
+}
+
+.admin {
+    &-wrapper {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    &-main {
+        width: calc(100% - 250px);
+        margin-left: 250px;
+    }
+
+    &-sidebar {
+        
+        position: fixed;
+        width: 250px;
+        height: 100%;
+        top: 0;
+
+        .logo {
+            padding: 20px;
+            width: 100%;
+
+            img {
+                max-width: 100%;
+            }
+        }
+
+        .links {
+            ul {
+                margin: 0;
+                padding: 0;
+                padding-left: 15px;
+
+                li {
+                    display: block;
+                    list-style: none;
+                    
+                    width: 100%;
+
+                    a {
+                        color: var(--green-700);
+                        padding: 10px 15px;
+                        display: block;
+                        width: 100%;
+                        text-decoration: none;
+
+                        &:hover {
+                            background-color: var(--green-700);
+                            color: white;
+                        }
+
+                        i {
+                            margin-right: 8px;
+                            margin-top: 0;
+                            float: left;
+                        }
+
+                        &.logout {
+                            color: var(--red-500);
+                        }
+                        &.logout:hover{
+                            color: white;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    
+
+    &-page {
+        padding: 20px;
+    }
+}
+
+.admin {
+    &-sidebar {
+        
+
+        @media screen and (max-width: 768px) {
+            width: 100%;
+            position: static;
+            height: auto;
+
+            .logo {
+                padding: 10px;
+                width: 40vw;
+            }
+
+            .links {
+                ul {
+                    li {
+                        a {
+                            padding: 8px 15px;
+                            font-size: 14px;
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &-main {
+
+        @media screen and (max-width: 768px) {
+            width: 100%;
+            margin-left: 0;
+        }
+    }
+}
+

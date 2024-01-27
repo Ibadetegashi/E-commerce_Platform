@@ -1,0 +1,27 @@
+
+
+<div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
+    <p-card header="Login" styleClass="orangeTitle">
+
+        <div class="col-md-12">
+    <form (ngSubmit)="login()">
+        <span  *ngIf="error?.message">{{error.message}}</span>
+        <div class="form-group mb-3">
+            <label for="exampleInputEmail1">Email address</label>
+            <input [(ngModel)]="email" type="email" class="form-control" name="email" id="exampleInputEmail1"
+                aria-describedby="emailHelp" placeholder="Enter email">
+            <span *ngIf="errors?.email">{{errors.email.msg}}</span>
+        </div>
+        <div class="form-group mb-3">
+            <label for="exampleInputPassword1">Password</label>
+            <input [(ngModel)]="password" type="password" class="form-control" name="password" id="exampleInputPassword1"
+                placeholder="Password">
+            <span *ngIf="errors?.password">{{errors.password.msg}}</span>
+        </div>
+        <button type="submit" class="btn ">Login</button>
+    </form>
+    <p class="mt-3">Don't have an account? <a  [routerLink]="['/register']">Register</a></p>
+        </div>
+
+    </p-card>
+</div>

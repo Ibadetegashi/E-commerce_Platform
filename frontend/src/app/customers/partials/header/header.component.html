@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary ">
+    <div class="container-fluid">
+        <a class="navbar-brand" routerLink="/products">
+            <img src="assets/logo.png" alt="Budi shop" style="width: auto; height: 70px; ">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" routerLink="/products">Products</a>
+                </li>
+                <li *ngIf="isAdmin" class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/products">Dashboard</a>
+                </li>
+            </ul>
+            <form class="d-flex align-items-center">
+                <i class="pi pi-user mr-2" routerLinkActive="activeIcon" [routerLink]="'profile'"></i>
+                <i [routerLink]="'cart'" routerLinkActive="activeIcon" class="pi pi-shopping-cart mr-2"
+                    severity="danger" pBadge value={{cartCount}}></i>
+
+                <a class="signout" (click)="logOut()" style="cursor: pointer;">Sign out</a>
+            </form>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,42 @@
+<p-toast></p-toast>
+<div class="admin-page">
+    <p-card header="Orders" styleClass="orangeTitle" subheader="List of all orders">
+        <div class="grid">
+            <div class="col-12">
+                <p-table [value]="orders" styleClass="p-datatable-striped"
+                 [paginator]="true" [rows]="5" [showCurrentPageReport]="true" [tableStyle]="{'min-width': '50rem'}"
+                >
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="client">Client<p-sortIcon field="client"></p-sortIcon></th>
+                            <th pSortableColumn="total">Total<p-sortIcon field="total"></p-sortIcon></th>
+                            <th pSortableColumn="createdAt">Date of order<p-sortIcon field="createdAt"></p-sortIcon></th>
+                            <th pSortableColumn="status">Status<p-sortIcon field="status"></p-sortIcon></th>
+                            <th>Actions</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-order>
+                        <tr>
+                        <td>{{ order.User ? order.User.firstname + ' ' + order.User.lastname : 'Deleted user' }}</td>
+                            <td>{{ order.total | currency:'EUR':'symbol'}}</td>
+                            <td>{{ order.createdAt | date: 'short' }}</td>
+                            <td>
+                                <p-tag [severity]= "statuses[order.status].severity"
+                                    [value]="order.status | uppercase"></p-tag>
+                            </td>
+                            <td>
+                                <p-button (click)="deleteOrder(order.id)" styleClass="p-button-danger rounded"
+                                    class="mr-2" icon="pi pi-trash"></p-button>
+
+                                <p-button  [routerLink]= "['order-details', order.id]" styleClass="p-button rounded"
+                                    icon="pi pi-eye"> </p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </p-card>
+</div>
+<p-confirmDialog [style]="{ width: '50vw' }" [baseZIndex]="10000" styleClass="custom-confirm-dialog"
+    rejectButtonStyleClass="p-button-text"></p-confirmDialog>

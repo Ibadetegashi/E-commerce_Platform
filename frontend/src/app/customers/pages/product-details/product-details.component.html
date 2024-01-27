@@ -1,0 +1,36 @@
+<p-toast></p-toast>
+
+<div class="container mt-5">
+    <div *ngIf="product$ | async as product" class="row gx-5">
+        <div class="col-md-6">
+            <img [src]="product?.image" class="img-fluid mb-4" style="max-height: 500px;" alt="">
+        </div>
+        <div class="col-md-6">
+            <div class="title orangeTitle">
+                <h1><b><em>{{product?.name}}</em></b></h1>
+            </div>
+            <div class="price">
+                <h2>{{product?.price | currency:'EUR':'symbol'}}</h2>
+            </div>
+            <div class="product-quantity">
+                <div class="field">
+                    <label for="quantity">Quantity</label><br>
+                    <p-inputNumber [(ngModel)]="quantity" mode="decimal" [showButtons]="true" inputId="quantity"
+                        [min]="1" [max]="100">
+                    </p-inputNumber>
+                </div>
+            </div>
+
+            <div class="product-actions">
+                <button pButton pRipple type="button" label="Add to Cart" class="rounded button"
+                    (click)="addProductToCart()"></button>
+            </div>
+
+            <hr>
+
+            <div class="description">
+                <p>{{product?.description}}</p>
+            </div>
+        </div>
+    </div>
+</div>

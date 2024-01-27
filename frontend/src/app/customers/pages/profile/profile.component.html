@@ -1,0 +1,68 @@
+<p-toast></p-toast>
+<div class="grid mx-auto gap-3 mt-5" style="width: 80%;">
+    <div class="col-md-6">
+        <p-card header="Change info" [style]="{'width':'100%'}" styleClass="orangeTitle" >
+            <div class="grid">
+                <div class="col-md-12">
+                    <form [formGroup]="form" class="mx-auto ">
+                        <div class="row">
+                            <div class="field col-md-12">
+                                <label for="firstname">First Name</label><br>
+                                <input type="text" id="firstname" formControlName="firstname" pInputText
+                                    [ngClass]="{'ng-dirty ng-invalid': error?.firstname}" />
+                                <span class="text-danger" *ngIf="error?.firstname">{{error?.firstname?.msg}}</span>
+                            </div>
+
+                            <div class="field col-md-12">
+                                <label for="lastname">Last Name</label><br>
+                                <input type="text" id="lastname" formControlName="lastname" pInputText
+                                    [ngClass]="{'ng-dirty ng-invalid': error?.lastname}" />
+                                <span class="text-danger" *ngIf="error?.lastname">{{error?.lastname?.msg}}</span>
+                            </div>
+
+                            <div class="field col-md-12">
+                                <label for="password">Password</label><br>
+                                <input type="password" id="password" formControlName="password" pInputText
+                                    [ngClass]="{'ng-dirty ng-invalid': error?.password} " />
+                                <span class="text-danger" *ngIf="error?.password">{{error?.password?.msg}}</span>
+                            </div>
+
+                            <div class="field col-md-12">
+                                <button type="button" class="btn btn-primary" style="width: 100%;"
+                                    (click)="changeInfo()">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </p-card>
+
+    </div>
+    <div class="col-md-5">
+        <p-card header="Change email" [style]="{'width':'100%'}" styleClass="mx-auto orangeTitle">
+            <div class="grid">
+                <div class="col-md-12">
+                    <form class="mx-auto ">
+                        <div class="field col-md-12">
+                            <label for="email">Email</label><br>
+                            <input type="email" id="email" name="email" [(ngModel)]="email" pInputText
+                                [ngClass]="{'ng-dirty ng-invalid': error?.email}" />
+                            <span class="text-danger" *ngIf="error?.email">{{error?.email?.msg}}</span>
+                            <span class="text-danger" *ngIf="emailMessage">{{emailMessage}}</span>
+                            <span class="text-warning" *ngIf="confirmEmail">{{confirmEmail}}</span>
+                                
+
+                        </div>
+                        <div class="field col-md-12">
+                            <button type="button" class="btn " style="width: 100%;"
+                                (click)="changeEmail()">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </p-card>
+    </div>
+
+
+</div>
+

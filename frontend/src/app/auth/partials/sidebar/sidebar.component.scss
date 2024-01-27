@@ -1,0 +1,10 @@
+.pi{
+    color: var(--orange-500);
+}
+.a{
+    color: var(--green-700);
+}
+.active, .a:hover{
+    background-color: var(--green-700);
+    color: white !important
+}

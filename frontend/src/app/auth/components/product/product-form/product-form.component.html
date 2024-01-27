@@ -1,0 +1,73 @@
+<p-toast></p-toast>
+<div class="admin-page">
+    <p-card [header]="isEditMode ? 'Edit Product' : 'Add Product'" styleClass="orangeTitle">
+        <div class="grid mb-5">
+            <div class="col-12">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <p-button (click)="isEditMode ? updateProduct() : createProduct()"
+                            styleClass="greenButton" 
+                            [label]= "isEditMode ? 'Update': 'Create'" icon="pi pi-plus">
+                        </p-button>
+                    </div>
+                    <div class="p-toolbar-group-left">
+                        <p-button styleClass="p-button-danger" icon="pi pi-arrow-circle-left" label="Cancel"
+                            routerLink="../"></p-button>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="col-12">
+                <form [formGroup]="form" enctype="multipart/form-data">
+                    <div class="formgrid p-fluid grid">
+                        <div class="field col">
+                            <label for="name">Name</label>
+                            <input formControlName="name" id="name" type="text" pInputText
+                                [ngClass]="{'ng-dirty ng-invalid': error?.name}" />
+                            <span class="text-danger" *ngIf="error?.name">{{ error.name.msg }}</span>
+                        </div>
+
+                        <div class="field col-12">
+                            <label for="description">Description</label><br />
+                            <textarea formControlName="description" rows="5" cols="30" pInputTextarea
+                                [ngClass]="{'ng-dirty ng-invalid': error?.description}" [autoResize]="true"></textarea>
+                            <span class="text-danger" *ngIf="error?.description">{{ error.description.msg }}</span>
+                        </div>
+
+                        <div class="field col-6">
+                            <label for="locale-euro">Price</label>
+                            <p-inputNumber formControlName="price" [ngClass]="{'ng-dirty ng-invalid': error?.price}"
+                                inputId="locale-euro" mode="currency" currency="EUR" [minFractionDigits]="2"
+                                currencyDisplay="symbol"></p-inputNumber>
+                            <span class="text-danger" *ngIf="error?.price">{{ error.price.msg }}</span>
+                        </div>
+
+                        <div class="field col-6">
+                            <label for="Category">Category</label>
+                            <p-dropdown *ngIf="categoryOptions$ | async as categoryOptions" formControlName="Category" [options]="categoryOptions" optionLabel="name"
+                                [ngClass]="{'ng-dirty ng-invalid':error?.Category}" [filter]="true" filterBy="name"
+                                [showClear]="true" placeholder="Select a Category"></p-dropdown>
+                            <span class="text-danger" *ngIf="error?.Category">{{ error.Category.msg }}</span>
+                        </div>
+
+                        <div class="field col-12">
+                            <label for="name">Image</label>
+                            <input type="file" class="p-inputtext" accept="image/*"
+                                [ngClass]="{'ng-dirty ng-invalid': fileError}" (change)="onImageUpload($event)"  [ngClass]="{'ng-dirty ng-invalid': multerError || fileError}" />
+                            <span class="text-danger" *ngIf="fileError">{{fileError}}</span>
+                            <span class="text-danger" *ngIf="multerError">{{multerError}}</span>
+
+                            <div class="col-2 mt-2 pl-0">
+                                <img style="width: 100%" [src]="imageDisplay" alt="" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+    </p-card>
+</div>

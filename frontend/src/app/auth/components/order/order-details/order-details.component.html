@@ -1,0 +1,94 @@
+<p-toast></p-toast>
+<div class="admin-page" *ngIf="order">
+    <p-card [header]="'Order'" subheader="You can edit order status here" styleClass="orangeTitle">
+        <!-- Order Details -->
+        <p-fieldset>
+            <ng-template pTemplate="header">
+                <div class="d-flex align-items-center m-4 text-primary">
+                    <span class="pi pi-shopping-bag mr-2"></span>
+                    <span class="font-bold text-lg">Order Details</span>
+                </div>
+            </ng-template>
+            <div class="row">
+                <div class="col-md-3">
+                    <h3><b>Order Id</b></h3>
+                    <p>{{ order.id }}</p>
+                </div>
+                <div class="col-md-3">
+                    <h3><b>Order Date</b></h3>
+                    <p>{{ order.createdAt | date: 'short' }}</p>
+                </div>
+                <div class="col-md-3">
+                    <h3><b>Order Status</b></h3>
+                    <p-dropdown [options]="statuses" [(ngModel)]="selectedStatus" optionLabel="label" optionValue="id"
+                        (onChange)="changeStatus()"></p-dropdown>
+                </div>
+                <div class="col-md-3">
+                    <h3><b>Order Total Price</b></h3>
+                    <p>&euro;{{ order.total }}</p>
+                </div>
+            </div>
+        </p-fieldset>
+
+        <!-- Items Details -->
+        <p-fieldset>
+            <ng-template pTemplate="header">
+                <div class="d-flex align-items-center m-4 text-primary">
+                    <span class="pi pi-shopping-cart mr-2"></span>
+                    <span class="font-bold text-lg">Items Details</span>
+                </div>
+            </ng-template>
+            <div class="row mb-5">
+                <div class="col-md-1"><b>No.</b></div>
+                <div class="col-md-3"><b>Product Name</b></div>
+                <div class="col-md-2"><b>Category</b></div>
+                <div class="col-md-2"><b>Price</b></div>
+                <div class="col-md-2 "><b>Quantity</b></div>
+                <div class="col-md-2 "><b>Subtotal</b></div>
+            </div>
+            <div class="row mb-5 " *ngFor="let orderItem of orderItems; let i= index">
+                <div class="col-md-1">{{ i+1 }}</div>
+                <div class="col-md-3">{{ orderItem.Product.name }}</div>
+                <div class="col-md-2">{{ orderItem.Product.Category.name }}</div>
+                <div class="col-md-2">{{ orderItem.Product.price | currency:'EUR':'symbol' }}</div>
+                <div class="col-md-2">{{ orderItem.quantity }}</div>
+                <div class="col-md-2">{{ orderItem.Product.price * orderItem.quantity | currency:'EUR':'symbol' }}</div>
+            </div>
+            <hr class="col-12">
+            <div class="row" style="color: green">
+                <div class="col-2 offset-md-8"><b><em>Total Price</em></b></div>
+                <div class="col-2"><b><em>{{ order.total | currency:'EUR':'symbol' }}</em></b></div>
+            </div>
+        </p-fieldset>
+
+        <!-- User Details -->
+        <p-fieldset>
+            <ng-template pTemplate="header">
+                <div class="d-flex align-items-center m-4 text-primary">
+                    <span class="pi pi-user mr-2"></span>
+                    <span class="font-bold text-lg">User Details</span>
+                </div>
+            </ng-template>
+            <div class="row">
+                <div class="col-md-4">
+                    <h3><b>Order Address</b></h3>
+                    <p>
+                        {{ order.shippingAddress }}<br />
+                        {{ order.zip }} {{ order.city }}<br />
+                        {{ order.country }}
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h3><b>Client Info</b></h3>
+                    <td>{{ order.User ? order.User.firstname + ' ' + order.User.lastname : 'Deleted user' }}</td>
+                </div>
+                <div class="col-md-4">
+                    <h3><b>Contact Info</b></h3>
+                    <p>{{ order.phoneNumber }}</p>
+                    <p>{{ order.User ? order.User.email : 'Deleted user' }}</p>
+                </div>
+            </div>
+        </p-fieldset>
+
+    </p-card>
+</div>

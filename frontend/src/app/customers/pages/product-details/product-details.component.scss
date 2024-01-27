@@ -1,0 +1,28 @@
+.product-quantity {
+    margin: 25px 0;
+
+    label {
+        font-size: 1.2em;
+    }
+
+
+}
+
+.button {
+    background-color: #EE7214;
+    border: none;
+}
+
+
+:host ::ng-deep .p-inputnumber-button-up,
+:host ::ng-deep .p-inputnumber-button-down {
+    border: none;
+    background-color: #EE7214;
+}
+
+.price h2 {
+    font-size: 1.7em;
+    color: green;
+    font-weight: bolder;
+}
+

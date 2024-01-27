@@ -1,0 +1,41 @@
+<p-toast></p-toast>
+<div class="admin-page">
+    <p-card header="Users" subheader="List of all users" styleClass="orangeTitle">
+        <div class="grid">
+            <div class="col-12">
+                <p-table *ngIf="users$ | async as users" [value]="users" styleClass="custom-table"
+                 [paginator]="true" [rows]="5" [showCurrentPageReport]="true" [tableStyle]="{'min-width': '50rem'}"
+                >
+                    <ng-template pTemplate="header">
+                        <tr [ngClass]="{'border-black': true}">
+                            <th pSortableColumn="firstname">First Name <p-sortIcon field="firstname"></p-sortIcon></th>
+                            <th pSortableColumn="lastname">Last Name <p-sortIcon field="lastname"></p-sortIcon></th>
+                            <th>Email</th>
+                            <th>isAdmin</th>
+                            <th>Actions</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-user>
+                        <tr [ngClass]="{'border-gray': true}">
+                            <td>{{ user.firstname }}</td>
+                            <td>{{ user.lastname }}</td>
+                            <td>{{ user.email}}</td>
+                            <td>
+                                <p-inputSwitch [(ngModel)]="user.isAdmin" (onChange)="updateUserAdminStatus(user)"></p-inputSwitch>
+                            </td>
+                            <td>
+                                <p-button (click)="deleteUser(user.id)" styleClass="p-button-danger rounded mr-2"
+                                    icon="pi pi-trash"></p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+
+            </div>
+
+        </div>
+    </p-card>
+</div>
+<p-confirmDialog [style]="{ width: '50vw' }" [baseZIndex]="10000" styleClass="custom-confirm-dialog"
+    rejectButtonStyleClass="p-button-text"></p-confirmDialog>

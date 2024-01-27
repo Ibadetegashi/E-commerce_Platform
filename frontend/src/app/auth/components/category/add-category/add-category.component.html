@@ -1,0 +1,35 @@
+<p-toast></p-toast>
+<div class="admin-page">
+    <p-card [header]="isEditMode? 'Update Category' : 'Add Category'" subheader="List of all categories"  styleClass="orangeTitle">
+        <div class="grid">
+            <div class="col-12">
+                <p-toolbar >
+                    <div class="p-toolbar-group-left">
+                        <p-button (click)="isEditMode ? editCategory() : createCategory()" 
+                        styleClass="greenButton" 
+                         [label]= "isEditMode? 'Update': 'Create'" icon="pi pi-plus"
+                        ></p-button>
+                    </div>
+                    <div class="p-toolbar-group-left">
+                        <p-button styleClass="p-button-danger"  icon="pi pi-arrow-circle-left" label="Cancel"  routerLink="../"></p-button>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12">
+                <form [formGroup]="form">
+                    
+                    <br>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="name">Category Name</label><br>
+                            <input name="name" formControlName="name"  id="name" type="text"  [ngClass]="{'red': error?.name}" pInputText/>
+                            <span class="text-danger" *ngIf="error?.name">{{error.name.msg}} </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </p-card>
+</div>

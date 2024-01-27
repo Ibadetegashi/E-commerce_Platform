@@ -1,0 +1,43 @@
+
+.product-item {
+    max-width: 250px;
+    max-height:350px;
+    min-height: 350px;
+    background-color: white;
+    color: #EE7214;
+    text-align: center;
+    
+}
+.product-item:hover{
+    box-shadow: 5px 5px 15px rgba(83,68,122,.5);
+}
+.img {
+    text-align: center;
+    padding: 2px;
+    background-color: rgba(255, 255, 255, 0.688);
+    min-height: 190px;
+    max-height: 190px;
+    cursor: pointer;
+    display: grid;
+    place-content: center;
+    
+}
+
+.img img {
+    max-width: 80%;
+    height: 100%;
+}
+
+.card-subtitle {
+    color: green;
+    font-size: 1.4em;
+}
+
+.card-title{
+    font-size: 1.5em;
+}
+.btn {
+    background-color: var(--orange-600);
+    width: 100%;
+}
+

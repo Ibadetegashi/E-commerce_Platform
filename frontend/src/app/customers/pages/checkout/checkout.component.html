@@ -1,0 +1,70 @@
+<p-card styleClass="mx-auto mb-5" header="Order Form" [style]="{'width': '60%', 'color':'#EE7214'}">
+    <div class="back-to-cart mb-3">
+        <a class="back-to-cart" routerLink="/cart">&leftarrow; Back to cart</a>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="makeOrder()" class=" fluid grid" >
+        <div class="row col-md-12">
+            <div class="field  col-md-6">
+                <label for="name">First Name</label>
+                <input readonly formControlName="firstname" id="firstname" type="text" pInputText [ngClass]="{'ng-dirty ng-invalid': error?.firstname}" />
+                <span class="text-danger" *ngIf="error?.firstname">{{error?.firstname?.msg}}</span>
+
+            </div>
+            <div class="field  col-md-6">
+                <label for="lastname">Last Name</label>
+                <input readonly formControlName="lastname" id="lastname" type="text" pInputText  [ngClass]="{'ng-dirty ng-invalid': error?.lastname}"/>
+                <span class="text-danger" *ngIf="error?.lastname">{{error?.lastname?.msg}}</span>
+            </div>
+        </div>
+
+        <div class="row col-md-12">
+            <div class="field col-md-4">
+                <label for="email">Email</label>
+                <input readonly
+                 formControlName="email" id="email" type="text" pInputText  [ngClass]="{'ng-dirty ng-invalid': error?.email}" />
+                <span class="text-danger" *ngIf="error?.email">{{error?.email?.msg}}</span>
+            </div>
+            <div class="field col-md-4">
+                <label for="phoneNumber">Phone</label><br />
+                <p-inputMask [style]="{'width':'100%'}" styleClass="input" mask="(+383) 49-999-999"
+                    formControlName="phoneNumber" placeholder="(+383) 49-999-999"  [ngClass]="{'ng-dirty ng-invalid': error?.phoneNumber}"></p-inputMask>
+                <span class="text-danger" *ngIf="error?.phoneNumber">{{error?.phoneNumber?.msg}}</span>
+
+            </div>
+            <div class="field col-md-4">
+                <label for="shippingAddress">Address</label>
+                <input formControlName="shippingAddress" id="shippingAddress" type="text" pInputText  [ngClass]="{'ng-dirty ng-invalid': error?.shippingAddress}" />
+                <span class="text-danger" *ngIf="error?.shippingAddress">{{error?.shippingAddress?.msg}}</span>
+
+            </div>
+        </div>
+
+        <div class="row col-md-12">
+            <div class="field col-md-4">
+                <label for="zip">Zip Code</label>
+                <input formControlName="zip" id="zip" type="text" pInputText  [ngClass]="{'ng-dirty ng-invalid': error?.zip}"/>
+                <span class="text-danger" *ngIf="error?.zip">{{error?.zip?.msg}}</span>
+
+            </div>
+            <div class="field col-md-4">
+                <label for="city">City</label>
+                <input formControlName="city" id="city" type="text" pInputText  [ngClass]="{'ng-dirty ng-invalid': error?.city}"/>
+                <span class="text-danger" *ngIf="error?.city">{{error?.city?.msg}}</span>
+
+            </div>
+            <div class="field col-md-4">
+                <label for="country">Country</label>
+                <input formControlName="country" id="country" type="text" pInputText  [ngClass]="{'ng-dirty ng-invalid': error?.country}"/>
+                <span class="text-danger" *ngIf="error?.country">{{error?.country?.msg}}</span>
+
+            </div>
+        </div>
+
+        <div class="row col-12">
+            <div class="field col-12">
+                <button type="submit" [disabled]="orderItems.length === 0" class="btn btn-block">Submit</button>
+            </div>
+        </div>
+    </form>
+</p-card>
