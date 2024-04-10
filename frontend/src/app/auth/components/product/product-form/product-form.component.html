@@ -42,6 +42,12 @@
                                 currencyDisplay="symbol"></p-inputNumber>
                             <span class="text-danger" *ngIf="error?.price">{{ error.price.msg }}</span>
                         </div>
+                        <div class="field col-6">
+                            <label for="stock">Stock</label>
+                            <p-inputNumber formControlName="stock" [ngClass]="{'ng-dirty ng-invalid': error?.stock}" inputId="stock"
+                                ></p-inputNumber>
+                            <span class="text-danger" *ngIf="error?.stock">{{ error.stock.msg }}</span>
+                        </div>
 
                         <div class="field col-6">
                             <label for="Category">Category</label>
@@ -51,7 +57,7 @@
                             <span class="text-danger" *ngIf="error?.Category">{{ error.Category.msg }}</span>
                         </div>
 
-                        <div class="field col-12">
+                        <div class="field col-6">
                             <label for="name">Image</label>
                             <input type="file" class="p-inputtext" accept="image/*"
                                 [ngClass]="{'ng-dirty ng-invalid': fileError}" (change)="onImageUpload($event)"  [ngClass]="{'ng-dirty ng-invalid': multerError || fileError}" />

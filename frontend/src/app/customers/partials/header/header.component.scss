@@ -1,13 +1,13 @@
-.nav-item, .pi, .signout{
+.nav-item, .pi{
     cursor: pointer;
     font-size: 1.4rem;    
 }
 
-.pi:hover, .signout:hover{
+.pi:hover{
     color: var(--orange-600) !important
 }
 
- a , .signout{
+ a {
     text-decoration: none;
     padding: 0.5em;
     color: var(--green-700) !important
@@ -17,5 +17,15 @@
     color: white !important ;
 }
 .activeIcon{
-    color: var(--orange-500);
+    color: var(--orange-500) !important;
 }
+.dropdown-menu{
+    padding: 0;
+}
+.dropdown-menu .dropdown-item:hover {
+    background-color: var(--orange-600);
+    color: white !important;
+}
+
+
+

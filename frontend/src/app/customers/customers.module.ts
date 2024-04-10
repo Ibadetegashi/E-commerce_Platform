@@ -20,8 +20,10 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputMaskModule } from 'primeng/inputmask';
 import { PasswordModule } from 'primeng/password';
 import { ProfileComponent } from './pages/profile/profile.component';
-
-
+import { OrderHistoryComponent } from './pages/order-history/order-history.component';
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { MenubarModule } from 'primeng/menubar';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
     CartComponent,
     CheckoutComponent,
     ProfileComponent,
-    
+    OrderHistoryComponent,
   ],
   imports: [
     CommonModule,
@@ -51,7 +53,9 @@ import { ProfileComponent } from './pages/profile/profile.component';
     CardModule,
     InputTextModule,
     PasswordModule,
-    
+    TableModule,
+    TagModule,
+    MenubarModule
   ],
   exports: [],
   providers:[MessageService]

@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 const createProduct = async (req, res) => {
     try {
-        const { name, description } = req.body;
+        const { name, description, stock } = req.body;
         const price = Number(req.body.price)
         const categoryId = parseInt(req.body.categoryId)
         // Check if an image file was uploaded
@@ -20,7 +20,8 @@ const createProduct = async (req, res) => {
                 price,
                 description,
                 image: `${url}${image}`,
-                categoryId
+                categoryId,
+                stock: Number(stock)
             },
             include: {
                 Category: true
@@ -82,20 +83,14 @@ const getProductById = async (req, res) => {
 const editProduct = async (req, res) => {
     try {
         const productId = parseInt(req.params.id);
-        const { name, description } = req.body;
+        const { name, description, stock } = req.body;
         const categoryId = Number(req.body.categoryId);
         const price = Number(req.body.price);
-        const product = await prisma.product.findUnique({
-            where: { id: productId }
-        })
-        if (!product) {
-            return res.status(404).json({ message: `Product with ID ${productId} does not exist` })
-        }
 
         // Check if a new file is provided in the request
-        let image = req.file ? `${process.env.URL}/public/images/${req.file.filename}` : product.image;
+        let image = req.file ? req.file.filename : null;
 
-        //const url = `${process.env.URL}/public/images/`;
+        const url = `${process.env.URL}/public/images/`;
 
         const updatedProduct = await prisma.product.update({
             where: { id: productId },
@@ -104,8 +99,9 @@ const editProduct = async (req, res) => {
                 price,
                 description,
                 // Use the new file if provided, otherwise keep the existing file
-                image,
-                categoryId
+                image: image ? `${url}${image}` : undefined,
+                categoryId,
+                stock: Number(stock)
             },
             include: {
                 Category: true

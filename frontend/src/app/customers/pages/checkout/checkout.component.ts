@@ -5,6 +5,7 @@ import { OrderService } from '../../services/order.service';
 import { Router } from '@angular/router';
 import { UsersService } from 'src/app/auth/services/users.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -44,7 +45,6 @@ export class CheckoutComponent implements OnInit {
       zip: new FormControl(''),
       phoneNumber: new FormControl(),
       status: new FormControl('Pending'),
-      
     })
   }
 
@@ -60,24 +60,52 @@ export class CheckoutComponent implements OnInit {
     });
   }
   makeOrder() {
+    const getProductObservables = this.orderItems.map(item => 
+  this.orderService.getProduct(item.productId)
+);
+
+// Use forkJoin to wait for all getProduct requests to complete
+forkJoin(getProductObservables).subscribe((products: any[]) => {
+  let insufficientStockProducts: string[] = []; // Array to hold names of products with insufficient stock
+
+  // Iterate through the products obtained from getProduct requests
+  for (let i = 0; i < products.length; i++) {
+    const product = products[i].data; // Assuming product data is in the 'data' property
+    const orderItem = this.orderItems[i];
+
+    // Check if quantity exceeds stock for the current product
+    if (orderItem.quantity > product.stock) {
+      insufficientStockProducts.push(product.name); // Add product name to the array
+    }
+  }
+
+  if (insufficientStockProducts.length > 0) {
+    // Inform the user about the products with insufficient stock
+    alert(`Sorry, the following products do not have enough stock: ${insufficientStockProducts.join(', ')}`);
+  } else {
+    // If all products have enough stock, proceed with placing the order
     const order = {
       shippingAddress: this.form.value.shippingAddress,
       city: this.form.value.city,
       country: this.form.value.country,
       zip: this.form.value.zip,
-      phoneNumber:this.form.value.phoneNumber,
+      phoneNumber: this.form.value.phoneNumber,
       items: this.orderItems,
       status: this.form.value.status,
       userId: this.userId
-    }
+    };
+
     this.orderService.makeOrder(order).subscribe((res: any) => {
-      this.cartService.emptyCart()
+      this.cartService.emptyCart();
       alert("Your order has been placed successfully!");
       this.router.navigate(['/products']);
-    }, (err:any) => {
+    }, (err: any) => {
       console.log(err);
-      this.error = err.error.errors
-    })
+      this.error = err.error.errors;
+    });
+  }
+});
+
   }
 
  

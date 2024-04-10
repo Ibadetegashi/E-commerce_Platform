@@ -29,6 +29,7 @@ model Product {
   id          Int          @id @default(autoincrement())
   name        String
   price       Decimal
+  stock        Int @default(10)
   description String       @db.VarChar(600)
   image       String       @db.VarChar(255)
   Category    Category?    @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)

@@ -1,12 +1,18 @@
-const transporter = require('./transporter.js')
+const transporter = require('./transporter.js');
+const { confirmEmail } = require('./emailConfirmTemplate.js')
 
 
 function sendConfirmationEmail(email, confirmationToken) {
+    const link = `${process.env.URL}/user/confirm/${confirmationToken}`
+    const message = confirmEmail(link)
+    console.log('link', link);
+
+
     const mailOptions = {
         from: 'makerspace.powerup@gmail.com',
         to: email,
         subject: 'Confirm Your Email',
-        text: `Click the following link to confirm your email: ${process.env.URL}/user/confirm/${confirmationToken}`,
+        html: message
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -20,7 +26,7 @@ function sendConfirmationEmail(email, confirmationToken) {
     });
 }
 
-function sendUpdateConfirmationEmail(email, token,name) {
+function sendUpdateConfirmationEmail(email, token, name) {
     const mailOptions = {
         from: 'makerspace.powerup@gmail.com',
         to: email,
@@ -41,4 +47,4 @@ function sendUpdateConfirmationEmail(email, token,name) {
     });
 }
 
-module.exports = {sendConfirmationEmail, sendUpdateConfirmationEmail}
+module.exports = { sendConfirmationEmail, sendUpdateConfirmationEmail }

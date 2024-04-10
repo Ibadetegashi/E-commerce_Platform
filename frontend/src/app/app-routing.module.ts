@@ -20,6 +20,7 @@ import { CheckoutComponent } from './customers/pages/checkout/checkout.component
 import { OrdersComponent } from './auth/components/order/orders/orders.component';
 import { OrderDetailsComponent } from './auth/components/order/order-details/order-details.component';
 import { ProfileComponent } from './customers/pages/profile/profile.component';
+import { OrderHistoryComponent } from './customers/pages/order-history/order-history.component';
 
 const routes: Routes = [
   {
@@ -60,7 +61,8 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     canActivate:[AuthGuardService],
-    children: [{
+    children: [
+      {
        path: 'products',
       component: ProductsListComponent,
        
@@ -80,7 +82,12 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent
+      },
+          {
+        path: 'order-history',
+        component: OrderHistoryComponent
       }
+     
     ]
   },
    

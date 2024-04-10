@@ -16,12 +16,28 @@
                     <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/products">Dashboard</a>
                 </li>
             </ul>
+
+
+
             <form class="d-flex align-items-center">
-                <i class="pi pi-user mr-2" routerLinkActive="activeIcon" [routerLink]="'profile'"></i>
+                <div class="dropdown">
+                    <a class="nav-link" routerLinkActive="activeIcon" role="button" id="userDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="pi pi-user mr-2 dropdown-toggle"  [class.activeIcon]="isProfileActive || isOrderHistoryActive"></i>
+                    </a>
+                    <ul class="dropdown-menu " aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" routerLinkActive="activeIcon" [routerLink]="'profile'">Profile</a>
+                        </li>
+                        <li><a class="dropdown-item" routerLinkActive="activeIcon" [routerLink]="'order-history'">Order
+                                History</a>
+                        </li>
+                        <a class="dropdown-item" (click)="logOut()" style="cursor: pointer;">Sign out</a>
+                        <li></li>
+                    </ul>
+                </div>
                 <i [routerLink]="'cart'" routerLinkActive="activeIcon" class="pi pi-shopping-cart mr-2"
                     severity="danger" pBadge value={{cartCount}}></i>
 
-                <a class="signout" (click)="logOut()" style="cursor: pointer;">Sign out</a>
             </form>
         </div>
     </div>

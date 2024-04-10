@@ -35,7 +35,8 @@ export class ProductFormComponent implements OnInit{
       description: new FormControl(''),
       image: new FormControl(''),
       price: new FormControl(''),
-      Category: new FormControl(''),
+      Category: new FormControl('',),
+      stock : new FormControl(0)
     });
     this.categoryOptions$ =  this.categoryService.getCategories()
     this.checkMode()
@@ -50,6 +51,7 @@ export class ProductFormComponent implements OnInit{
     formData.append('Category', this.form.value.Category)
     formData.append('categoryId', this.form.value.Category.id)
     formData.append('price', this.form.value.price)
+    formData.append('stock', this.form.value.stock)
     console.log(formData.get('categoryId'));
 
     this.productService.createProduct(formData).subscribe((res: any) => {  
@@ -81,6 +83,7 @@ export class ProductFormComponent implements OnInit{
     formData.append('Category', this.form.value.Category)
     formData.append('categoryId', this.form.value.Category.id)
     formData.append('price', this.form.value.price)
+    formData.append('stock', this.form.value.stock)
     this.productService.editProduct(this.paramId, formData).subscribe((res: any) => {
       this.removeErrors()
       console.log(res);
@@ -127,6 +130,7 @@ export class ProductFormComponent implements OnInit{
           Category: product.Category,
           price: product.price,
           image: product.image,
+          stock: product.stock
         })
         this.imageDisplay = product.image
       })

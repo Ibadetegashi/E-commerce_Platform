@@ -4,6 +4,9 @@ const prisma = new PrismaClient()
 const sendEmailToConfirmRejectOrder = require('../utils/emailConfirmRejectOrder.js')
 const sendEmailForStatusUpdated = require('../utils/emailStatusUpdate.js')
 
+
+
+
 const createOrder = async (req, res) => {
     try {
         const itemsIds = await Promise.all(req.body.items.map(async (item) => {
@@ -16,6 +19,7 @@ const createOrder = async (req, res) => {
             console.log(response);
             return { id: response.id };
         }));
+
         const totalPrices = await Promise.all(itemsIds.map(async (itemsId) => {
             const item = await prisma.orderItems.findUnique(
                 {
@@ -76,12 +80,21 @@ const createOrder = async (req, res) => {
                     }
                 }
             }
-
         });
 
         if (!order) {
             return res.status(400).send({ message: 'Could not create Order' });
         }
+        //console.log('order items', order.items);
+        const orderItems = await Promise.all(order.items.map(async (item) => {
+            const updateStock = await prisma.product.update({
+                where: { id: item.Product.id },
+                data: { stock: item.Product.stock - item.quantity }
+            })
+            console.log('stock in making order', updateStock);
+        }))
+
+
         sendEmailToConfirmRejectOrder(order.User.email, order)
         return res.json({ data: order, message: 'Created Successfully.' });
     } catch (error) {
@@ -192,13 +205,14 @@ const confirmOrder = async (req, res) => {
             where: { id: orderId },
             include: {
                 User: true,
-                items: { select: { Product: true } },
+                items: { include: { Product: true } },
             },
             data: {
                 status: "Confirmed"
             }
         })
-       delete order.User.password
+
+        delete order.User.password
         console.log(order);
         res.status(201).send(`The order is confirmed.`)
 
@@ -213,12 +227,23 @@ const cancelOrder = async (req, res) => {
             where: { id: orderId },
             include: {
                 User: true,
-                items: { select: { Product: true } },
+                items: { include: { Product: true } },
             },
             data: {
                 status: "Canceled"
             }
         })
+
+        const orderItems = await Promise.all(order.items.map(async (item) => {
+            const updateStock = await prisma.product.update({
+                where: { id: item.Product.id },
+                data: { stock: item.Product.stock + item.quantity }
+            })
+            console.log('stock in cancel', updateStock);
+        }))
+
+
+
         delete order.User.password
         console.log(order);
         res.status(201).send("The order is canceled.")

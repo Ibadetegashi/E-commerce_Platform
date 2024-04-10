@@ -1,0 +1,43 @@
+<p-toast></p-toast>
+<div class="admin-page">
+    <p-card header="" styleClass="orangeTitle" subheader="List of all you orders">
+        <div class="grid">
+            <div class="col-12">
+                <p *ngIf="message">{{ message }}</p>
+                <p-table *ngIf="!message" [value]="orderHistory" styleClass="p-datatable-striped" [paginator]="true" [rows]="5"
+                    [showCurrentPageReport]="true" [tableStyle]="{'min-width': '50rem'}">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>No</th>
+                            <th pSortableColumn="total">Total<p-sortIcon field="total"></p-sortIcon></th>
+                            <th pSortableColumn="createdAt">Date of order<p-sortIcon field="createdAt"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="status">Status<p-sortIcon field="status"></p-sortIcon></th>
+                            <th>Actions</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-order let-i="rowIndex">
+                        <tr>
+                           
+                          <td>{{i+1}}</td>
+                            <td>{{ order.total | currency:'EUR':'symbol'}}</td>
+                            <td>{{ order.createdAt | date: 'short' }}</td>
+                            <td>
+                                <!-- <p-tag [severity]="statuses[order.status].severity"
+                                    [value]="order.status | uppercase"></p-tag> -->
+                                    statusi
+                            </td>
+                            <td>
+                                <!-- <p-button (click)="deleteOrder(order.id)" styleClass="p-button-danger rounded"
+                                    class="mr-2" icon="pi pi-trash"></p-button> -->
+
+                                <p-button [routerLink]="['order-details', order.id]" styleClass="p-button rounded"
+                                    icon="pi pi-eye"> </p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </p-card>
+</div>

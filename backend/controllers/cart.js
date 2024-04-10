@@ -2,10 +2,11 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 const addToCart = async (req, res) => {
-    const productId = parseInt(req.body.productId)
-    const quantity = parseInt(req.body.quantity)
-    const userId = parseInt(req.user.userId)
+    const productId = parseInt(req.body.productId);
+    const quantity = parseInt(req.body.quantity);
+    const userId = parseInt(req.user.userId);
     const fixedQuantity = JSON.parse(req.body.fixedQuantity);
+
     try {
         let cart = await prisma.cart.findFirst({
             where: {
@@ -16,58 +17,68 @@ const addToCart = async (req, res) => {
             },
         });
 
-        if (cart) {
-            const existingCartItem = cart.items.find(item => item.productId === productId);
-            if (existingCartItem) {
-                // Update quantity if the item exists
-                if (fixedQuantity) {
-                    existingCartItem.quantit = quantity;
-                } else {
-                    existingCartItem.quantit += quantity;
+        if (!cart) {
+            // Create a new cart if none exists for the user
+            cart = await prisma.cart.create({
+                data: {
+                    userId: userId,
                 }
-                await prisma.cartItem.update({
-                    where: { id: existingCartItem.id },
-                    data: { quantit: existingCartItem.quantit }
-
-                })
+            });
+            console.log('Create a new cart');
+        }
+        console.log('else');
+        const existingCartItem = cart.items?.find(item => item.productId === productId);
+        if (existingCartItem) {
+            // Update quantity if the item exists
+            if (fixedQuantity) {
+                existingCartItem.quantit = quantity;
             } else {
-                await prisma.cartItem.create({
-                    data: {
-                        Cart: {
-                            connect: {
-                                id: cart.id,
-                            },
-                        },
-                        Product: {
-                            connect: {
-                                id: productId,
-                            },
-                        },
-                        quantit: quantity,
-                    },
-                });
+                existingCartItem.quantit += quantity;
             }
-
-            // New cart
-            cart = await prisma.cart.findUnique({
-                where: {
-                    id: cart.id,
-                },
-                include: {
-                    items: {
-                        include: {
-                            Product: true,
+            await prisma.cartItem.update({
+                where: { id: existingCartItem.id },
+                data: { quantit: existingCartItem.quantit }
+            });
+        } else {
+            // Create a new cart item if it doesn't exist
+            await prisma.cartItem.create({
+                data: {
+                    Cart: {
+                        connect: {
+                            id: cart.id,
                         },
                     },
+                    Product: {
+                        connect: {
+                            id: productId,
+                        },
+                    },
+                    quantit: quantity,
                 },
             });
-            return res.status(201).send(cart);
         }
+
+        // Fetch the updated cart
+        cart = await prisma.cart.findUnique({
+            where: {
+                id: cart.id,
+            },
+            include: {
+                items: {
+                    include: {
+                        Product: true,
+                    },
+                },
+            },
+        });
+
+        return res.status(201).send(cart);
     } catch (error) {
         console.log(error);
         res.status(500).send("Internal Server Error.");
     }
 };
+
 
 const removeItemFromCart = async (req, res) => {
     try {
@@ -156,7 +167,10 @@ const emptyCart = async (req, res) => {
 
         if (existingCart) {
             const deletedCart = await prisma.cart.delete({
-                where: { userId }
+                where: { userId },
+                include: {
+                    items: true
+                }
             });
 
             return res.status(200).json({ message: 'Cart emptied successfully', deletedCart, newCart: [] });

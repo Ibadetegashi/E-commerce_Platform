@@ -54,6 +54,7 @@ export class CartService {
   emptyCart() {
     return this.http.get(`${this.url}/emptyCart`).subscribe((res: any) => {
       this.cart$.next(res.newCart)
+      console.log('karta emptpy',this.cart$);
     })
   }
 

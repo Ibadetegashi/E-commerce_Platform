@@ -19,4 +19,8 @@ export class OrderService {
     return this.http.post(`${this.url}/order`, data)
   }
 
+  getOrderHistory() {
+    return this.http.get(`${this.url}/order/client/orders`,);
+  }
+
 }
