@@ -21,6 +21,7 @@ import { OrdersComponent } from './auth/components/order/orders/orders.component
 import { OrderDetailsComponent } from './auth/components/order/order-details/order-details.component';
 import { ProfileComponent } from './customers/pages/profile/profile.component';
 import { OrderHistoryComponent } from './customers/pages/order-history/order-history.component';
+import { OrderHistoryDetailsComponent } from './customers/pages/order-history-details/order-history-details.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,8 @@ const routes: Routes = [
         {
           path:'orders/order-details/:id', component: OrderDetailsComponent
         },
+       
+             
       ]
   },
   {
@@ -86,7 +89,11 @@ const routes: Routes = [
           {
         path: 'order-history',
         component: OrderHistoryComponent
-      }
+      },
+          
+            {
+          path:'order-history/:id', component: OrderHistoryDetailsComponent
+        },
      
     ]
   },

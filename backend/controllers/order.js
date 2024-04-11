@@ -181,12 +181,25 @@ const updateOrderStatus = async (req, res) => {
         if (!order) {
             return res.status(404).json({ message: 'Order Not Found' })
         }
+        if (order.status === 'Canceled') {
+            return res.status(404).json({ message: 'Cannot Update a Canceled Order' })
+        }
         const orderStatusUpdated = await prisma.order.update({
             where: { id },
             data: { status }
         })
         if (!orderStatusUpdated) {
             return res.status(400).json({ message: "Failed to Update Order" })
+        }
+        if (orderStatusUpdated.status === 'Canceled') {
+            const orderItems = await Promise.all(order.items.map(async (item) => {
+                const updateStock = await prisma.product.update({
+                    where: { id: item.Product.id },
+                    data: { stock: item.Product.stock + item.quantity }
+                })
+                console.log('stock in cancel', updateStock);
+            }))
+
         }
         console.log(order);
         sendEmailForStatusUpdated(order.User.email, status, order)
@@ -223,6 +236,20 @@ const confirmOrder = async (req, res) => {
 const cancelOrder = async (req, res) => {
     try {
         const orderId = parseInt(req.params.orderId)
+        const findOrder = await prisma.order.findUnique({
+            where: { id: orderId }
+        });
+
+        if (!findOrder) {
+            return res.status(404).json({ message: "Order not found." });
+        }
+
+        if (findOrder.status === "Canceled") {
+            return res.status(400).json({ message: "The order is already canceled." });
+        }
+        if (findOrder.status !== "Pending") {
+            return res.status(400).json({ message: "Can not edit or cancel the order, because it's being processed." });
+        }
         const order = await prisma.order.update({
             where: { id: orderId },
             include: {
@@ -246,10 +273,11 @@ const cancelOrder = async (req, res) => {
 
         delete order.User.password
         console.log(order);
-        res.status(201).send("The order is canceled.")
+        res.status(200).json({message:"The order is canceled."})
 
     } catch (error) {
-
+        console.log(error);
+        res.status(500).send('Internal Server Error')
     }
 }
 
@@ -333,6 +361,31 @@ const getOrderItems = async (req, res) => {
     }
 }
 
+const getOrdersOfLoggedUser = async (req, res) => {
+    try {
+        console.log(req.user);
+        const orders = await prisma.order.findMany({
+            where: {
+                userId: req.user.userId
+            },
+            include: {
+                items: {
+                    include: {
+                        Product: true
+                    }
+                }
+            }
+        })
+        if (!orders || orders.length === 0) {
+            return res.status(404).send({ message: "You have no order!" });
+        }
+        res.json({ data: orders, message: 'Orders Retrieved Successfully' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json("Internal Server Error")
+    }
+}
+
 module.exports = {
     createOrder,
     getOrders,
@@ -342,5 +395,6 @@ module.exports = {
     orderTotalSum,
     getOrderItems,
     confirmOrder,
-    cancelOrder
+    cancelOrder,
+    getOrdersOfLoggedUser
 }

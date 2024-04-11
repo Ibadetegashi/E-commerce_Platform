@@ -22,27 +22,9 @@ export class HeaderComponent implements OnInit {
       this.cartCount = cart?.length ?? 0
     })
 
-    this.items = [
-          
-            {
-                label: 'Users',
-                icon: 'pi pi-fw pi-user',
-                items: [
-                    {
-                        label: 'New',
-                        icon: 'pi pi-fw pi-user-plus'
-                    },
-                    {
-                        label: 'Delete',
-                        icon: 'pi pi-fw pi-user-minus'
-                    },
-                  
-                ]
-            },
-        
-        ];
+   
     this.router.events.subscribe((event) => {
-     console.log('eventi',event);
+    // console.log('eventi',event);
       if (event instanceof NavigationEnd) {
         this.updateActiveStates();
       }

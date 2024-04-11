@@ -23,4 +23,15 @@ export class OrderService {
     return this.http.get(`${this.url}/order/client/orders`,);
   }
 
+getOrderDetails(id:number) {
+    return this.http.get(`${this.url}/order/${id}`);
+  }
+    getOrderItems(orderid: number) {
+    return this.http.get(`${this.url}/order/orderItems/${orderid}`)
+  }
+
+  cancelOrder(orderid: number) {
+    return this.http.get(`${this.url}/order/cancelOrder/${orderid}`)
+  }
+
 }

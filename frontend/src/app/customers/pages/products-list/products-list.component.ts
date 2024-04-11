@@ -11,5 +11,10 @@ import { ProductService } from 'src/app/auth/services/product.service';
 export class ProductsListComponent {
 
   products$ = this.productService.getProducts()
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService) {
+    this.products$.subscribe((products) => {
+      console.log('prooooo',products);
+    })
+    
+  }
 }

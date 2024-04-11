@@ -1,0 +1,85 @@
+/* Styles for Product Image */
+.product-image {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+/* Styles for Product Details */
+.product-details {
+    padding: 10px;
+}
+
+.product-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.product-quantity {
+    color: #666;
+}
+
+/* Styles for Order Details */
+.order-details {
+    padding: 10px;
+}
+
+.order-details p {
+    margin-bottom: 5px;
+}
+
+.user-details {
+    padding: 10px;
+}
+/* Styles for Cancel Button */
+.cancel-button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.cancel-button:hover {
+    background-color: #c82333;
+}
+
+/* Apply styles to the cards */
+.order-items-card {
+    color: var(--orange-600) !important;
+    /* Orange font color */
+}
+
+.address-details-card {
+    color: var(--orange-600) !important;
+    /* Orange font color */
+}
+
+.user-details-card {
+    color: var(--orange-600) !important;
+    /* Orange font color */
+}
+
+.order-details-card {
+    color: var(--orange-600) !important;
+    /* Orange font color */
+}
+
+/* Apply green color to the price */
+.price {
+    color: green !important;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.product-name{
+    font-size: 1.2em;
+}
+
+.card{
+    padding: 10px 10px 0px 10px;
+}
+.quantity{
+    font-size: 1em;
+    font-weight: bold;
+}

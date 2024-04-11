@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
+import { STATUSES } from 'src/app/auth/components/order/orderStatuses';
 
 @Component({
   selector: 'app-order-history',
@@ -8,7 +9,9 @@ import { OrderService } from '../../services/order.service';
 })
 export class OrderHistoryComponent implements OnInit{
   orderHistory = [];
-  message = ''
+  message = '';
+  statuses: { [key: string]: { severity: string; text: string } }= STATUSES
+
 
   constructor(private orderHistoryService: OrderService) { }
   ngOnInit(): void {

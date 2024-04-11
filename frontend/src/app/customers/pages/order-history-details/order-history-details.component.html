@@ -1,0 +1,75 @@
+<p-toast></p-toast>
+<div class="grid" style="margin-top: 2em;margin-bottom: 2em;">
+    <div class="row">
+        
+        <div class="col-lg-8 col-md-12">
+            <div class="order-items-card card">
+                <ng-container *ngFor="let item of orderItems">
+                    <div class="row align-items-center">
+                        <div class="col-3">
+                            <img [src]="item.Product.image" alt="Product Image" style="max-width: 70%;">
+                        </div>
+                        <div class="col-3 product-name">
+                            <p>{{ item.Product.name }}</p>
+                        </div>
+                        <div class="col-4  quantity">
+                            <p>Quantity: {{ item.quantity }}</p>
+                            <p class="price">Price: {{item.Product.price | currency:'EUR':'symbol'}}</p>
+                        </div>
+                        <div class="col-2 price">
+                            <p>{{ item.Product.price * item.quantity | currency:'EUR':'symbol' }}</p>
+                        </div>
+                      
+                    </div>
+                <hr>
+                </ng-container>
+            </div>
+        </div>
+
+ 
+        <div class="col-lg-4 col-md-12">
+            <div class="grid">
+                
+                  
+                    <div class="col-12">
+                        <div class="address-details-card card">
+                            <div class="order-details">
+                                <p><strong>Shipping Address:</strong> {{ order.shippingAddress }}</p>
+                                <p><strong>City:</strong> {{ order.city }}</p>
+                                <p><strong>Country:</strong> {{ order.country }}</p>
+                                <p><strong>Zip:</strong> {{ order.zip }}</p>
+                                <p><strong>Phone Number:</strong> {{ order.phoneNumber }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+               
+                    <div class="col-12">
+                        <div class="user-details-card card">
+                            <div class="user-details">
+                                <p><strong>User:</strong> {{ order.User.firstname }} {{ order.User.lastname }}</p>
+                                <p><strong>Email:</strong> {{ order.User.email }}</p>
+                              
+                            </div>
+                        </div>
+                    </div>
+
+             
+                    <div class="col-12">
+                        <div class="order-details-card card">
+                            <div class="order-details">
+                                <p><strong>Status:</strong> {{ order.status }}</p>
+                                <p class="price"><strong>Total:</strong> {{ order.total | currency:'EUR':'symbol'}}</p>
+                                <p><strong>Made on:</strong> {{ order.createdAt | date }}</p>
+                            
+                                <button class="cancel-button" (click)="cancelOrder()">Cancel Order</button>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<p-confirmDialog [style]="{ width: '50vw' }" [baseZIndex]="10000" styleClass="custom-confirm-dialog"
+    rejectButtonStyleClass="p-button-text"></p-confirmDialog>

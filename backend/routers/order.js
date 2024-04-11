@@ -10,7 +10,8 @@ const {
     orderTotalSum,
     getOrderItems,
     confirmOrder,
-    cancelOrder
+    cancelOrder,
+    getOrdersOfLoggedUser
 } = require('../controllers/order.js')
 const { isAdmin, isAuth } = require('../middlewares/verifyToken.js')
 
@@ -24,5 +25,7 @@ router.get('/orderitems/:id',isAuth, getOrderItems)
 
 router.get('/confirmOrder/:orderId', confirmOrder)
 router.get('/cancelOrder/:orderId', cancelOrder)
-
+//Orders endpoint for client
+router.use(isAuth)
+router.get('/client/orders', getOrdersOfLoggedUser)
 module.exports = router

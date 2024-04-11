@@ -24,6 +24,10 @@ import { OrderHistoryComponent } from './pages/order-history/order-history.compo
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { MenubarModule } from 'primeng/menubar';
+import { OrderHistoryDetailsComponent } from './pages/order-history-details/order-history-details.component';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 
 @NgModule({
   declarations: [
@@ -36,6 +40,7 @@ import { MenubarModule } from 'primeng/menubar';
     CheckoutComponent,
     ProfileComponent,
     OrderHistoryComponent,
+    OrderHistoryDetailsComponent,
   ],
   imports: [
     CommonModule,
@@ -55,7 +60,8 @@ import { MenubarModule } from 'primeng/menubar';
     PasswordModule,
     TableModule,
     TagModule,
-    MenubarModule
+    MenubarModule,
+    ConfirmDialogModule
   ],
   exports: [],
   providers:[MessageService]

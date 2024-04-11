@@ -71,6 +71,11 @@ export class OrderDetailsComponent {
         });
     }, (err:any) => {
       console.log(err);
+      this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: err.error.message
+              });
     })
   }
 }
