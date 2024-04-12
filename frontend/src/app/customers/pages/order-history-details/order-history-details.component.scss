@@ -32,7 +32,7 @@
 }
 /* Styles for Cancel Button */
 .cancel-button {
-    background-color: #dc3545;
+    background-color: #dc3545 !important;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -83,4 +83,15 @@
 .quantity{
     font-size: 1em;
     font-weight: bold;
+}
+
+.btn {
+    background-color: var(--orange-600);
+    color: white;
+    width: 100%;
+    font-size: 1rem;
+    margin-top: 3vh;
+    padding: 1vh;
+    border-radius: 0;
+    border: none;
 }

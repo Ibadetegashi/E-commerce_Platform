@@ -384,6 +384,37 @@ const getOrdersOfLoggedUser = async (req, res) => {
     }
 }
 
+const editOrderAddress = async (req, res) => { 
+    try {
+        const orderId = +req.params.id
+        const order = await prisma.order.findUnique({
+            where: { id: orderId }
+        })
+        if (!order) { 
+            return res.status(404).json({ message: "No Order Found"})
+        }
+        if (order.status !== 'Pending') {
+            return res.status(403).json({message:"Cannot modify an ordered order."});
+        }
+
+        const updateOrder = await prisma.order.update({
+            where: {
+                id: orderId
+            },
+            data: {
+                 ...req.body
+            }
+        })
+        if (!updateOrder) { 
+            return res.status(400).json({ message: "Faild to update order address" })
+        }
+        res.json({data: updateOrder, message:"Update Successful"});
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json("Internal Server Error")
+    }
+}
 module.exports = {
     createOrder,
     getOrders,
@@ -394,5 +425,6 @@ module.exports = {
     getOrderItems,
     confirmOrder,
     cancelOrder,
-    getOrdersOfLoggedUser
+    getOrdersOfLoggedUser,
+    editOrderAddress
 }

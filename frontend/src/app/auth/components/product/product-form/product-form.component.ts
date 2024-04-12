@@ -138,7 +138,7 @@ export class ProductFormComponent implements OnInit{
    }
   
  private removeErrors() {
-    this.error = ''
+   this.error = ''
    this.fileError = ''
    this.multerError =''
   }

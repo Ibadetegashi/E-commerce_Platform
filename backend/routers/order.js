@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { createOrderValidation } = require('../validation/orderValidation.js')
+const { createOrderValidation, editAddressValidation } = require('../validation/orderValidation.js')
 const { handleValidationErrors } = require('../middlewares/errorHandler.js')
 const {
     createOrder,
@@ -11,7 +11,8 @@ const {
     getOrderItems,
     confirmOrder,
     cancelOrder,
-    getOrdersOfLoggedUser
+    getOrdersOfLoggedUser,
+    editOrderAddress
 } = require('../controllers/order.js')
 const { isAdmin, isAuth } = require('../middlewares/verifyToken.js')
 
@@ -28,4 +29,5 @@ router.get('/cancelOrder/:orderId', cancelOrder)
 //Orders endpoint for client
 router.use(isAuth)
 router.get('/client/orders', getOrdersOfLoggedUser)
+router.patch('/client/:id',editAddressValidation, handleValidationErrors, editOrderAddress)
 module.exports = router

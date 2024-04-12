@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { FormControl, FormGroup } from '@angular/forms';
+import { zip } from 'rxjs';
 
 @Component({
   selector: 'app-order-history-details',
@@ -9,9 +11,12 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   styleUrls: ['./order-history-details.component.scss']
 })
 export class OrderHistoryDetailsComponent implements OnInit {
+
   order: any
   orderId!: number
   orderItems: any
+  error: any;
+  form!: FormGroup
 
   constructor(
     private routeActive: ActivatedRoute,
@@ -27,14 +32,24 @@ export class OrderHistoryDetailsComponent implements OnInit {
       console.log("Param", param);
       this.orderId = param.id;
     })
-    this.getOrderItems()
+    
+
     this.getOrderDetails()
+    this.getOrderItems()
+    this.initAddressForm()
   }
 
   getOrderDetails() {
     this.orderService.getOrderDetails(this.orderId).subscribe((order:any) => {
       this.order = order.data;  
       console.log(this.order);
+      this.form.patchValue({
+        shippingAddress: this.order.shippingAddress,
+        phoneNumber: this.order.phoneNumber,
+        country: this.order.country,
+        city: this.order.city,
+        zip: this.order.zip
+      })
     }, err => {
       console.log(err);
     })
@@ -65,7 +80,6 @@ export class OrderHistoryDetailsComponent implements OnInit {
               setTimeout(() => {
                 this.router.navigate(['/order-history']);
                } ,1000);
-              
             },
             (err) => {
               console.log(err);
@@ -80,5 +94,45 @@ export class OrderHistoryDetailsComponent implements OnInit {
     });
   }
 
+  initAddressForm() {
+    this.form = new FormGroup({
+      shippingAddress: new FormControl(''),
+      city: new FormControl(''),
+      country: new FormControl(''),
+      zip: new FormControl(''),
+      phoneNumber: new FormControl(''),
+    })
+    console.log(this.form.value);
+  }
+
+  editAddress() {
+    this.orderService.editAddress(this.order.id, this.form.value).subscribe((res:any) => {
+      console.log(res);
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: res.message
+            });
+          setTimeout(() => {
+            window.location.reload();
+          
+               } ,100);
+     
+      
+    }, err => {
+      console.log(err);
+      if (err.error.errors) {
+      this.error = err.error.errors
+        return
+      }
+      this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: err.error.message
+              });
+    })
+  }
+
+  
   
 }

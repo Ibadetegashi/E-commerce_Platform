@@ -35,7 +35,13 @@
                                 <p><strong>Country:</strong> {{ order?.country }}</p>
                                 <p><strong>Zip:</strong> {{ order?.zip }}</p>
                                 <p><strong>Phone Number:</strong> {{ order?.phoneNumber }}</p>
+                                <hr>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    Edit Address
+                                </button>
                             </div>
+                          
                         </div>
                     </div>
 
@@ -57,8 +63,8 @@
                                 <p><strong>Status:</strong> {{ order?.status }}</p>
                                 <p class="price"><strong>Total:</strong> {{ order?.total | currency:'EUR':'symbol'}}</p>
                                 <p><strong>Made on:</strong> {{ order?.createdAt | date }}</p>
-                            
-                                <button class="cancel-button" (click)="cancelOrder()">Cancel Order</button>
+                                <hr>
+                                <button class="cancel-button btn" (click)="cancelOrder()">Cancel Order</button>
                             </div>
                         </div>
                     </div>
@@ -70,24 +76,62 @@
 <p-confirmDialog [style]="{ width: '50vw' }" [baseZIndex]="10000" styleClass="custom-confirm-dialog"
     rejectButtonStyleClass="p-button-text"></p-confirmDialog>
 
-    <!-- Button trigger modal -->
-
     
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Address</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+                <!-- Your address form goes here -->
+                <form [formGroup]="form" (ngSubmit)="editAddress()">
+                    <div class="row col-12">
+                        <div class="field col-md-6">
+                            <label for="phoneNumber">Phone</label><br />
+                            <p-inputMask [style]="{'width':'100%'}" styleClass="input" mask="(+383) 49-999-999"
+                                formControlName="phoneNumber" placeholder="(+383) 49-999-999"
+                                [ngClass]="{'ng-dirty ng-invalid': error?.phoneNumber}">
+                            </p-inputMask>
+                            <span class="text-danger" *ngIf="error?.phoneNumber">{{error?.phoneNumber?.msg}}</span>
+                        </div>
+                        <div class="field col-md-6">
+                            <label for="shippingAddress">Address</label><br>
+                            <input [style]="{'width':'100%'}"  formControlName="shippingAddress" id="shippingAddress" type="text" pInputText
+                                [ngClass]="{'ng-dirty ng-invalid': error?.shippingAddress}" />
+                            <span class="text-danger"
+                                *ngIf="error?.shippingAddress">{{error?.shippingAddress?.msg}}</span>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="field col-md-4">
+                            <label for="zip">Zip Code</label><br>
+                            <input  [style]="{'width':'100%'}" formControlName="zip" id="zip" type="text" pInputText
+                                [ngClass]="{'ng-dirty ng-invalid': error?.zip}" />
+                            <span class="text-danger" *ngIf="error?.zip">{{error?.zip?.msg}}</span>
+                        </div>
+                        <div class="field col-md-4">
+                            <label for="city">City</label><br>
+                            <input [style]="{'width':'100%'}" formControlName="city" id="city" type="text" pInputText
+                                [ngClass]="{'ng-dirty ng-invalid': error?.city}" />
+                            <span class="text-danger" *ngIf="error?.city">{{error?.city?.msg}}</span>
+                        </div>
+                        <div class="field col-md-4">
+                            <label for="country">Country</label><br>
+                            <input [style]="{'width':'100%'}" formControlName="country" id="country" type="text" pInputText
+                                [ngClass]="{'ng-dirty ng-invalid': error?.country}" />
+                            <span class="text-danger" *ngIf="error?.country">{{error?.country?.msg}}</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn">Save changes</button>
+                    </div>
+                </form>
+            </div>
+            
         </div>
     </div>
+</div>

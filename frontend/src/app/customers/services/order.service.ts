@@ -34,5 +34,7 @@ getOrderDetails(id:number) {
     return this.http.get(`${this.url}/order/cancelOrder/${orderid}`)
   }
 
-
+  editAddress(orderid: number, address: Object) {
+    return this.http.patch(`${this.url}/order/client/${orderid}`, address)
+  }
 }
