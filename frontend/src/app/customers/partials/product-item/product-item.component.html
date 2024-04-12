@@ -1,12 +1,13 @@
-<div class="card product-item" [ngClass]="{'out-of-stock': product.stock === 0}">
-    <div class="img" [routerLink]="['/details', product.id]">
+<div class="card product-item" >
+    <div class="img" [ngClass]="{'out-of-stock': product.stock === 0}" [routerLink]="['/details', product.id]">
         <img [src]="product?.image" class="card-img-top mx-auto" alt="...">
     </div>
-    <div class="card-body">
+    <div class="card-body" [ngClass]="{'out-of-stock': product.stock === 0}">
         <h1 class="card-title">{{ product.name?.slice(0, 18) + (product.name.length > 18 ? '...' : '') }}</h1>
         <h2 class="card-subtitle mt-0">{{product.price | currency:'EUR':'symbol'}}</h2>
         <a class="btn text-white" (click)="addToCart()" *ngIf="product.stock !== 0"><i
                 class="pi pi-shopping-cart"></i>Add to Cart</a>
-        <p class="out-of-stock-label" *ngIf="product.stock === 0">Out of Stock</p>
     </div>
+    <p class="out-of-stock-label" *ngIf="product.stock === 0">Out of Stock</p>
+
 </div>

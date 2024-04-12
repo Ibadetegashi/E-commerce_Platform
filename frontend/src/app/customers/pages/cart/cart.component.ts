@@ -15,6 +15,7 @@ export class CartComponent {
   cartWithProduct: any[] = []
   cartCount = 0
   totalPrices = 0
+  canAdd = true
   constructor(
     private cartService: CartService,
     private orderService: OrderService,
@@ -49,7 +50,8 @@ getCartDetails() {
             severity: 'success',
             summary: 'Success',
             detail: res.message
-          });
+           });
+      console.log('res.newCart.items', res.newCart.items);
       this.cartService.cart$.next(res.newCart.items)
     }, err => {
       console.log(err);
@@ -69,8 +71,12 @@ getCartDetails() {
   }
 
   changeQuantity(event: any, cartItem: any) {
-    console.log(event.value);
-    this.cartService.addItemToCart(cartItem.id,event.value,true)
+    
+    cartItem.stock < event.value ? this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Not enough stock!'
+         }) : this.cartService.addItemToCart(cartItem.id, event.value, true)
   }
 }
   

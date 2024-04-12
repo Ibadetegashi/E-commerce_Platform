@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 
 <div class="container mt-5">
-    <div *ngIf="product$ | async as product" class="row gx-5">
+    <div *ngIf="product" class="row gx-5">
         <div class="col-md-6">
             <img [src]="product?.image" class="img-fluid mb-4" style="max-height: 500px;" alt="">
         </div>

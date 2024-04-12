@@ -8,7 +8,8 @@
                         <h4 class="title"><b>Shopping Cart</b></h4>
                     </div>
                     <div class="col align-self-center text-right text-muted">
-                        <h4 class="title"><b>{{cartCount}}</b></h4></div>
+                        <h4 class="title"><b>{{cartCount}}</b></h4>
+                    </div>
                 </div>
             </div>
             <div class="row border-top border-bottom">
@@ -16,32 +17,21 @@
                     <div class="col-2"><img class="img-fluid" [src]="cartItem.image"></div>
                     <div class="col">
                         <div class="row name">{{cartItem.name}}</div>
-                         <div class="row price">{{cartItem.price | currency:'EUR':'symbol'}}</div>
+                        <div class="row price">{{cartItem.price | currency:'EUR':'symbol'}}</div>
                     </div>
                     <div class="col">
-                    <p-inputNumber 
-                        (onInput)="changeQuantity($event, cartItem)" 
-                        styleClass="input-styling" 
-                        [(ngModel)]="cartItem.quantit"
-                        mode="decimal" 
-                        [showButtons]="true" 
-                        inputId="quantity" 
-                        [min]="1" 
-                        [max]="100" 
-                        currency="EUR">
-                    </p-inputNumber>
+                        <p-inputNumber (onInput)="changeQuantity($event, cartItem)" styleClass="input-styling"
+                            [(ngModel)]="cartItem.quantit" mode="decimal" [showButtons]="true" inputId="quantity"
+                            [min]="1" [max]='cartItem.stock' currency="EUR">
+                        </p-inputNumber>
                     </div>
                     <div class="col su btotal">Subtotal:
-                         <span>{{cartItem.price * cartItem.quantit | currency:'EUR':'symbol'}}</span>
-                      </div>
-                    <div class="col "> 
-                        <p-button 
-                        (onClick)="deleteItem(cartItem)"
-                        icon="pi pi-times" 
-                        [rounded]="true" 
-                        [text]="true" 
-                        severity="danger">
-                    </p-button>
+                        <span>{{cartItem.price * cartItem.quantit | currency:'EUR':'symbol'}}</span>
+                    </div>
+                    <div class="col ">
+                        <p-button (onClick)="deleteItem(cartItem)" icon="pi pi-times" [rounded]="true" [text]="true"
+                            severity="danger">
+                        </p-button>
                     </div>
                 </div>
             </div>

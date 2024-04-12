@@ -192,7 +192,7 @@ const updateOrderStatus = async (req, res) => {
             return res.status(400).json({ message: "Failed to Update Order" })
         }
         if (orderStatusUpdated.status === 'Canceled') {
-            const orderItems = await Promise.all(order.items.map(async (item) => {
+             await Promise.all(order.items.map(async (item) => {
                 const updateStock = await prisma.product.update({
                     where: { id: item.Product.id },
                     data: { stock: item.Product.stock + item.quantity }
@@ -261,15 +261,13 @@ const cancelOrder = async (req, res) => {
             }
         })
 
-        const orderItems = await Promise.all(order.items.map(async (item) => {
+        await Promise.all(order.items.map(async (item) => {
             const updateStock = await prisma.product.update({
                 where: { id: item.Product.id },
                 data: { stock: item.Product.stock + item.quantity }
             })
             console.log('stock in cancel', updateStock);
         }))
-
-
 
         delete order.User.password
         console.log(order);

@@ -27,8 +27,8 @@ export class OrderHistoryDetailsComponent implements OnInit {
       console.log("Param", param);
       this.orderId = param.id;
     })
-    this.getOrderDetails()
     this.getOrderItems()
+    this.getOrderDetails()
   }
 
   getOrderDetails() {
