@@ -27,7 +27,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { OrderHistoryDetailsComponent } from './pages/order-history-details/order-history-details.component';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   declarations: [
@@ -61,7 +61,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     TableModule,
     TagModule,
     MenubarModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    PaginatorModule
   ],
   exports: [],
   providers:[MessageService]

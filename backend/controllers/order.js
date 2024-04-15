@@ -199,11 +199,13 @@ const updateOrderStatus = async (req, res) => {
                 })
                 console.log('stock in cancel', updateStock);
             }))
-
+        }
+        if (order.status === orderStatusUpdated.status) {
+          return  res.status(200).json({ message: 'Status updated successfully.', data: order })
         }
         console.log(order);
         sendEmailForStatusUpdated(order.User.email, status, order)
-        res.status(200).json({ message: 'Status updated successfully.', data: order })
+        res.status(200).json({ message: 'Status updated successfully and email was sent.', data: order })
 
     } catch (error) {
         console.log(error);
@@ -394,8 +396,9 @@ const editOrderAddress = async (req, res) => {
             return res.status(404).json({ message: "No Order Found"})
         }
         if (order.status !== 'Pending') {
-            return res.status(403).json({message:"Cannot modify an ordered order."});
-        }
+            return res.status(403).json({message:"Cannot modify an canceled or processed order."});
+        } 
+
 
         const updateOrder = await prisma.order.update({
             where: {

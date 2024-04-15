@@ -2,8 +2,11 @@
 <div class="products-page mt-5">
     <div class="grid">
         <div class="g-col-md-2 g-col-sm-6 d-flex justify-content-center gap-1 my-4 mx-auto"
-            *ngFor="let product of products$ | async" >
+            *ngFor="let product of products">
             <app-product-item [product]="product"></app-product-item>
         </div>
     </div>
+    <p-paginator  class="custom-paginator" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 20, 50]"
+        (onPageChange)="onPageChange($event)">
+    </p-paginator>
 </div>

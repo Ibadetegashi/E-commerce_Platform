@@ -1,5 +1,5 @@
 <p-toast></p-toast>
-<div class="card mt-5">
+<div class="card mt-5" *ngIf="!loading">
     <div class="row">
         <div class="col-md-8 cart">
             <div class="title">
@@ -53,3 +53,10 @@
         </div>
     </div>
 </div>
+<div class="loading-overlay" *ngIf="loading">
+    <!-- <div class="loading-text">
+        Loading...
+    </div> -->
+    <div class="loader"></div>
+</div>
+

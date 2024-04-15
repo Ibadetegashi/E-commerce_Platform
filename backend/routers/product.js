@@ -11,7 +11,8 @@ const {
     getProductById,
     setProductCategory,
     editProduct,
-    deleteProduct
+    deleteProduct,
+    getProductsPagination
 } = require('../controllers/product.js')
 
 const { isAdmin, isAuth } = require('../middlewares/verifyToken.js')
@@ -19,8 +20,9 @@ const uploading = require('../middlewares/upload.js')
 
 // router.post('/', isAdmin, upload.single('image'), createProductValidation, handleValidationErrors, createProduct) //create with image
 router.post('/', isAdmin, uploading ,createProductValidation, handleValidationErrors, createProduct);
+router.get('/', isAuth, getProductsPagination)
 
-router.get('/',isAuth, getProducts)
+//router.get('/',isAuth, getProducts)
 router.get('/:id',isAuth, getProductById)
 
 router.put('/category', isAdmin, setProductCategory)

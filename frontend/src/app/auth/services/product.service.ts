@@ -1,5 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import { Observable, catchError, defaultIfEmpty, map, of } from 'rxjs';
 import { Product } from 'src/app/shared/interfaces/product';
 import { environment } from 'src/environments/environment';
@@ -46,5 +47,16 @@ export class ProductService {
 
   editProduct(id: number, data:FormData) {
     return this.http.put(`${this.url}/${id}`, data)
+  }
+
+  // getProductsPagination(page: number , limit: number, categoryId: number , name: string) {
+  //   return this.http.get(`${this.url}?page=${page}&limit=${limit}&categoryId=${categoryId}&name=${name}`)
+  // }
+getProductsPagination(pageIndex: number, pageSize: number): Observable<any> {
+    let params = new HttpParams()
+      .set('page', pageIndex.toString())
+      .set('limit', pageSize.toString());
+
+    return this.http.get(this.url, { params: params });
   }
 }

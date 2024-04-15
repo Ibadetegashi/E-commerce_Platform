@@ -1,0 +1,27 @@
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight  {
+    background-color: var(--orange-600);
+    border-color: #EFF6FF;
+    color: #ffffff;
+}
+
+:host ::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight.p-focus {
+    background: var(--orange-600);
+    color: #fff;
+    border-color: #fff;
+}
+
+:host ::ng-deep .p-dropdown:not(.p-disabled).p-focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.1rem var(--orange-400);
+    border-color: transparent;
+}
+
+ :host ::ng-deep .p-dropdown:not(.p-disabled):hover {
+     border-color: var(--orange-400);
+ }
+
+
+:host ::ng-deep .p-dropdown-items-wrapper ul {
+    padding: 0;
+}

@@ -10,8 +10,10 @@ const createProductValidation = [
     body('price')
         .isFloat({ min: 0, max: 10000 })
         .withMessage('Price must be a valid float between 0 and 10000.'),
-    
+
     body('categoryId').notEmpty().withMessage('CategoryId is required.'),
+    body('Category').notEmpty().withMessage('Category is required.'),
+    body('stock').isInt({ min: 0 }).withMessage('Stock must be a positiv number').notEmpty().withMessage('Stock is required.'),
 ];
 
 const editProductValidation = [
@@ -24,9 +26,9 @@ const editProductValidation = [
     body('price').optional()
         .isFloat({ min: 0, max: 10000 })
         .withMessage('Price must be a valid float between 0 and 10000.'),
-    
-    body('categoryId').optional().notEmpty().withMessage('CategoryId is required.'),
 
+    body('categoryId').optional().notEmpty().withMessage('CategoryId is required.'),
+    body('stock').isInt({ min: 0 }).withMessage('Stock must be a positiv number').notEmpty().withMessage('Stock is required.'),
 ];
 
 const createCategoryValidation = [

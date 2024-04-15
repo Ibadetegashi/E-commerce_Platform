@@ -15,7 +15,7 @@ export class CartComponent {
   cartWithProduct: any[] = []
   cartCount = 0
   totalPrices = 0
-  canAdd = true
+  loading: boolean = true
   constructor(
     private cartService: CartService,
     private orderService: OrderService,
@@ -24,8 +24,9 @@ export class CartComponent {
     this.totalPriceOfCart()
   }
 
-getCartDetails() {
-  this.cartService.cart$.subscribe((carts: any) => {
+  getCartDetails() {
+    this.cartService.cart$.subscribe((carts: any) => {
+      this.loading = true
     console.log('carts', carts);
      this.cartCount = carts?.length ?? 0;
      this.cartWithProduct = [];
@@ -39,23 +40,35 @@ getCartDetails() {
         product.data.quantit = carts[index].quantit;
         this.cartWithProduct.push(product.data);
       });
+   
     });
-  });
+         setTimeout(() => {
+       this.loading = false;
+     }, 500)
+    }
+    );
 }
   deleteItem(cart: any) {
-    this.cartService.deleteItem(cart.id).subscribe((res: any) => {
+  
+         this.cartService.deleteItem(cart.id).subscribe((res: any) => {
       console.log(res.message);
-         this.messageService.add(
+          
+        
+    
+      console.log('res.newCart.items', res.newCart.items);
+           this.cartService.cart$.next(res.newCart.items)
+           setTimeout(() => {
+                this.messageService.add(
           {
             severity: 'success',
             summary: 'Success',
             detail: res.message
            });
-      console.log('res.newCart.items', res.newCart.items);
-      this.cartService.cart$.next(res.newCart.items)
+           }, 500)
+       
     }, err => {
       console.log(err);
-     })
+         })
   }
 
   totalPriceOfCart() {
@@ -71,12 +84,11 @@ getCartDetails() {
   }
 
   changeQuantity(event: any, cartItem: any) {
-    
-    cartItem.stock < event.value ? this.messageService.add({
+       cartItem.stock < event.value ? this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'Not enough stock!'
-         }) : this.cartService.addItemToCart(cartItem.id, event.value, true)
+       }) : this.cartService.addItemToCart(cartItem.id, event.value, true)
   }
 }
   

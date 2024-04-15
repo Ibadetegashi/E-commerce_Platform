@@ -40,11 +40,10 @@
     background-color: var(--orange-600);
     width: 100%;
 }
-/* Apply blur effect to product items that are out of stock */
+
 .out-of-stock {
     filter: blur(1px);
     position: relative !important;
-    /* Ensure the out-of-stock label is positioned relative to the card */
 }
 
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, NonNullableFormBuilder } from '@angular/forms';
 import { zip } from 'rxjs';
 
 @Component({
@@ -106,23 +106,25 @@ export class OrderHistoryDetailsComponent implements OnInit {
   }
 
   editAddress() {
-    this.orderService.editAddress(this.order.id, this.form.value).subscribe((res:any) => {
+    this.orderService.editAddress(this.order.id, this.form.value).subscribe((res: any) => {
+      this.error = null
       console.log(res);
             this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
                 detail: res.message
             });
-          setTimeout(() => {
+      setTimeout(() => {
+            this.error = null
             window.location.reload();
-          
-               } ,100);
+            } ,200);
      
       
     }, err => {
       console.log(err);
+      this.error = null
       if (err.error.errors) {
-      this.error = err.error.errors
+        this.error = err.error.errors
         return
       }
       this.messageService.add({
@@ -130,7 +132,7 @@ export class OrderHistoryDetailsComponent implements OnInit {
                 summary: 'Error',
                 detail: err.error.message
               });
-    })
+    }, )
   }
 
   

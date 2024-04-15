@@ -210,3 +210,29 @@ label{
 .card{
     margin-bottom: 4em;
 }
+
+.loading-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10%;
+    height: 10%;
+    z-index: 9999;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+    width: 50px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 8px solid lightsalmon;
+    border-right-color: var(--orange-600);
+    animation: l2 1s infinite linear;
+}
+
+@keyframes l2 {
+    to {
+        transform: rotate(1turn)
+    }
+}

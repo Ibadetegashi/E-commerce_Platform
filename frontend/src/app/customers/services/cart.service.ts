@@ -31,14 +31,17 @@ export class CartService {
   addItemToCart(productId: number, quantity: number, fixedQuantity: boolean) {
     return this.http.post(`${this.url}`, { productId, quantity, fixedQuantity })
       .subscribe((res:any) => {
-        this.messageService.add(
+       
+        
+        this.cart$.next(res.items)
+        setTimeout(() => {
+           this.messageService.add(
           {
             severity: 'success',
             summary: 'Success',
             detail: 'Cart was updated.'
           });
-        
-           this.cart$.next(res.items)
+        },500)
       });
   }
 

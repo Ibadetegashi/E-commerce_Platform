@@ -187,4 +187,47 @@ const deleteProduct = async (req, res) => {
         return res.status(500).send('Internal Server Error.');
     }
 }
-module.exports = { createProduct, getProducts, getProductById, setProductCategory, editProduct, deleteProduct }
+
+const getProductsPagination = async (req, res) => {
+    try {
+        const { query: { page = 1, limit = 10, categoryId = null, name = '' } } = req;
+        const match = {};
+        if (categoryId && categoryId !== 'null' && categoryId != undefined) {
+            match.categoryId = +categoryId; 
+        }
+        if (name) {
+            match.name = {contains: name}
+        }
+        console.log('match',match);
+        const products = await prisma.product.findMany({
+            skip: (page - 1) * limit,
+            take: +limit,
+            where: match,
+            include: {
+                Category: true
+            },
+            orderBy: {
+                createdAt: "desc"
+            }
+        });
+        const totalPages = Math.ceil((await prisma.product.count({ where: match })) / limit);
+        const totalRecords = Math.ceil(await prisma.product.count());
+        if (!products || products.length === 0) {
+            return res.status(404).json({ message: 'No Products Found.' });
+        }
+        return res.status(200).json({ message: "Products retrieved successfully.", data: products, totalPages, totalRecords });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send('Internal Server Error.');
+    }
+}
+
+module.exports = {
+    createProduct,
+    getProducts,
+    getProductById,
+    setProductCategory,
+    editProduct,
+    deleteProduct,
+    getProductsPagination
+}
