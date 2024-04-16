@@ -37,7 +37,7 @@ export class CartComponent {
 
     forkJoin(getProductObservables).subscribe((products: any) => {
       products.forEach((product: any, index: number) => {
-        product.data.quantit = carts[index].quantit;
+        product.data.quantit = carts[index].quantity;
         this.cartWithProduct.push(product.data);
       });
    
@@ -51,12 +51,10 @@ export class CartComponent {
   deleteItem(cart: any) {
   
          this.cartService.deleteItem(cart.id).subscribe((res: any) => {
-      console.log(res.message);
-          
-        
-    
-      console.log('res.newCart.items', res.newCart.items);
-           this.cartService.cart$.next(res.newCart.items)
+      console.log(res.message); 
+           console.log('res.newCart.items', res.newCart.items);
+            
+           this.cartService.cart$.next(res.newCart.items);
            setTimeout(() => {
                 this.messageService.add(
           {
@@ -76,7 +74,7 @@ export class CartComponent {
       this.totalPrices = 0
       cartItems.forEach((item: any) => {
         this.orderService.getProduct(item.productId).subscribe((product: any) => {
-          const price = item.quantit * product.data.price;
+          const price = item.quantity * product.data.price;
           this.totalPrices += price
         })
       })
@@ -84,6 +82,7 @@ export class CartComponent {
   }
 
   changeQuantity(event: any, cartItem: any) {
+    this.loading = true
        cartItem.stock < event.value ? this.messageService.add({
             severity: 'error',
             summary: 'Error',

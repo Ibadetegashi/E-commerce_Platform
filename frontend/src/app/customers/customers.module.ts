@@ -28,6 +28,7 @@ import { OrderHistoryDetailsComponent } from './pages/order-history-details/orde
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { PaginatorModule } from 'primeng/paginator';
+import { UnavailableProductsModalComponent } from './partials/unavailable-products-modal/unavailable-products-modal.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { PaginatorModule } from 'primeng/paginator';
     ProfileComponent,
     OrderHistoryComponent,
     OrderHistoryDetailsComponent,
+    UnavailableProductsModalComponent,
   ],
   imports: [
     CommonModule,

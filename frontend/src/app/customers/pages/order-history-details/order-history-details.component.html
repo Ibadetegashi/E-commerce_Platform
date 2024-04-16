@@ -1,7 +1,7 @@
-<p-toast></p-toast>
+
 <div class="grid" style="margin-top: 2em;margin-bottom: 2em;">
     <div class="row font">
-        
+
         <div class="col-lg-8 col-md-12">
             <div class="order-items-card card">
                 <ng-container *ngFor="let item of orderItems">
@@ -9,62 +9,64 @@
                         <div class="col-3">
                             <img [src]="item.Product.image" alt="Product Image" style="max-width: 70%;">
                         </div>
-                        <div class="col-3 product-name">
+                        <div class="col-3 product-name h5">
                             <p>{{ item.Product.name }}</p>
                         </div>
-                        <div class="col-4  quantity">
+                        <div class="col-4  quantity h6">
                             <p>Quantity: {{ item.quantity }}</p>
-                            <p class="price">Price: {{item.Product.price | currency:'EUR':'symbol'}}</p>
+                            <p class="price h6">Price: {{item.Product.price | currency:'EUR':'symbol'}}</p>
                         </div>
-                        <div class="col-2 price">
+                        <div class="col-2 price h6">
                             <p>{{ item.Product.price * item.quantity | currency:'EUR':'symbol' }}</p>
                         </div>
                     </div>
-                <hr>
+                    <hr>
                 </ng-container>
             </div>
         </div>
         <div class="col-lg-4 col-md-12">
-            <div class="grid">  
-                    <div class="col-12">
-                        <div class="address-details-card card">
-                            <div class="order-details">
-                                <p><strong>City:</strong> {{ order?.city }}</p>
-                                <p><strong>Shipping Address:</strong> {{ order?.shippingAddress }}</p>
-                                <p><strong>Country:</strong> {{ order?.country }}</p>
-                                <p><strong>Zip:</strong> {{ order?.zip }}</p>
-                                <p><strong>Phone Number:</strong> {{ order?.phoneNumber }}</p>
-                                <hr>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    Edit Address
-                                </button>
-                            </div>
+            <div class="grid">
+                <div class="col-12">
+                    <div class="address-details-card card">
+                        <div class="order-details h6">
+                            <p><strong>City:</strong> {{ order?.city }}</p>
+                            <p><strong>Shipping Address:</strong> {{ order?.shippingAddress }}</p>
+                            <p><strong>Country:</strong> {{ order?.country }}</p>
+                            <p><strong>Zip:</strong> {{ order?.zip }}</p>
+                            <p><strong>Phone Number:</strong> {{ order?.phoneNumber }}</p>
+                            <hr>
+                            <!-- Button trigger modal -->
+                            <button *ngIf="order?.status == 'Pending'" [disabled]="order?.status != 'Pending'" type="button" class="btn"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Edit Address
+                            </button>
                         </div>
                     </div>
-                    <div class="col-12">
-                        <div class="user-details-card card">
-                            <div class="user-details">
-                                <p><strong>User:</strong> {{ order?.User.firstname }} {{ order?.User.lastname }}</p>
-                                <p><strong>Email:</strong> {{ order?.User.email }}</p>
-                              
-                            </div>
-                        </div>
-                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="user-details-card card h6">
+                        <div class="user-details">
+                            <p><strong>User:</strong> {{ order?.User.firstname }} {{ order?.User.lastname }}</p>
+                            <p><strong>Email:</strong> {{ order?.User.email }}</p>
 
-             
-                    <div class="col-12">
-                        <div class="order-details-card card">
-                            <div class="order-details">
-                                <p><strong>Status:</strong> {{ order?.status }}</p>
-                                <p class="price"><strong>Total:</strong> {{ order?.total | currency:'EUR':'symbol'}}</p>
-                                <p><strong>Made on:</strong> {{ order?.createdAt | date }}</p>
-                                <hr>
-                                <button class="cancel-button btn" (click)="cancelOrder()">Cancel Order</button>
-                            </div>
                         </div>
                     </div>
-                
+                </div>
+
+
+                <div class="col-12">
+                    <div class="order-details-card card">
+                        <div class="order-details h6">
+                            <p><strong>Status:</strong> {{ order?.status }}</p>
+                            <p class="price"><strong>Total:</strong> {{ order?.total | currency:'EUR':'symbol'}}</p>
+                            <p><strong>Made on:</strong> {{ order?.createdAt | date }}</p>
+                            <hr>
+                            <button *ngIf="order?.status == 'Pending'" class="cancel-button btn" [disabled]="order?.status != 'Pending'"
+                                (click)="cancelOrder()">Cancel Order</button>
+                                <button  data-bs-toggle="modal" data-bs-target="#exampleModal1" class=" btn" (click)="mergeOrderItemsWithCart(orderItems)">Reorder</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -72,8 +74,8 @@
 <p-confirmDialog [style]="{ width: '50vw' }" [baseZIndex]="10000" styleClass="custom-confirm-dialog"
     rejectButtonStyleClass="p-button-text"></p-confirmDialog>
 
-    
-    <!-- Modal -->
+
+<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -95,8 +97,8 @@
                         </div>
                         <div class="field col-md-6">
                             <label for="shippingAddress">Address</label><br>
-                            <input [style]="{'width':'100%'}"  formControlName="shippingAddress" id="shippingAddress" type="text" pInputText
-                                [ngClass]="{'ng-dirty ng-invalid': error?.shippingAddress}" />
+                            <input [style]="{'width':'100%'}" formControlName="shippingAddress" id="shippingAddress"
+                                type="text" pInputText [ngClass]="{'ng-dirty ng-invalid': error?.shippingAddress}" />
                             <span class="text-danger"
                                 *ngIf="error?.shippingAddress">{{error?.shippingAddress?.msg}}</span>
                         </div>
@@ -104,7 +106,7 @@
                     <div class="row col-md-12">
                         <div class="field col-md-4">
                             <label for="zip">Zip Code</label><br>
-                            <input  [style]="{'width':'100%'}" formControlName="zip" id="zip" type="text" pInputText
+                            <input [style]="{'width':'100%'}" formControlName="zip" id="zip" type="text" pInputText
                                 [ngClass]="{'ng-dirty ng-invalid': error?.zip}" />
                             <span class="text-danger" *ngIf="error?.zip">{{error?.zip?.msg}}</span>
                         </div>
@@ -116,8 +118,8 @@
                         </div>
                         <div class="field col-md-4">
                             <label for="country">Country</label><br>
-                            <input [style]="{'width':'100%'}" formControlName="country" id="country" type="text" pInputText
-                                [ngClass]="{'ng-dirty ng-invalid': error?.country}" />
+                            <input [style]="{'width':'100%'}" formControlName="country" id="country" type="text"
+                                pInputText [ngClass]="{'ng-dirty ng-invalid': error?.country}" />
                             <span class="text-danger" *ngIf="error?.country">{{error?.country?.msg}}</span>
                         </div>
                     </div>
@@ -127,7 +129,43 @@
                     </div>
                 </form>
             </div>
-            
+
         </div>
     </div>
 </div>
+<!-- Modal for reorder -->
+<!-- <div class="modal" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true"  >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+    <div class="modal-body">
+        <ng-container *ngIf="orderItemsWithoutStock.length > 0; else allProductsAvailable">
+            <p>The following products are not available:</p>
+            <ul>
+                <li *ngFor="let item of orderItemsWithoutStock">
+                    {{ item.Product.name }} (Quantity: {{ item.quantity }})
+                </li>
+            </ul>
+            <p>Do you want to add only the available products to your cart?</p>
+        </ng-container>
+        <ng-template #allProductsAvailable>
+            <p>All products in this order are available.</p>
+            <p>Do you want to add all of them to your cart?</p>
+        </ng-template>
+    </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="close()" >Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="continueAddingToCart()">Continue</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<app-unavailable-products-modal
+    [existingCartItems]="existingCartItems"
+    [orderItemsWithoutStock]="orderItemsWithoutStock">
+</app-unavailable-products-modal>
+

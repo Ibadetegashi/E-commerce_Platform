@@ -343,6 +343,7 @@ const getOrderItems = async (req, res) => {
                         name: true,
                         price: true,
                         image: true,
+                        stock:true,
                         Category: {
                             select: {
                                 name: true
@@ -416,6 +417,15 @@ const editOrderAddress = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json("Internal Server Error")
+    }
+}
+
+const reOrder = async (req, res) => {
+    try {
+        const {items} = req.body
+    } catch (error) {
+        console.log(error);
+        res.status(500).json('Internal Server Error')
     }
 }
 module.exports = {

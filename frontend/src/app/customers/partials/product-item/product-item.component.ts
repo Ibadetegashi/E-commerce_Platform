@@ -17,7 +17,7 @@ export class ProductItemComponent implements OnInit {
     this.cartService.cart$.subscribe((cart: any[]) => {
       if (this.product) {
         const cartItem = cart.find(item => item.productId === this.product.id);
-        if (cartItem && cartItem.quantit >= this.product.stock) {
+        if (cartItem && cartItem.quantity >= this.product.stock) {
           this.product.stock = 0;
         }
       }

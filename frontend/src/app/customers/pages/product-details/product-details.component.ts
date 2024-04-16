@@ -38,7 +38,7 @@ export class ProductDetailsComponent implements OnInit {
   addProductToCart() {
     const productInCart = this.cart.find((p: any) => p.productId === this.product.id)
     if (productInCart) {
-      productInCart.quantit + this.quantity > this.product.stock ? this.messageService.add({
+      productInCart.quantity + this.quantity > this.product.stock ? this.messageService.add({
         severity: 'error',
         summary: 'Error',
         detail: 'Not enough stock!'

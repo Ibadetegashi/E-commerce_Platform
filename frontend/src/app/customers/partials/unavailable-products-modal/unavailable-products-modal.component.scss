@@ -1,0 +1,24 @@
+.btn {
+    background-color: var(--orange-600);
+    color: white;
+    font-size: 1rem;
+    margin-top: 3vh;
+    padding: 1.5vh;
+    border-radius: 0;
+    margin-right: 1vh;
+    border: none;
+}
+
+.modal-footer{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.orange{
+    color: var(--orange-600);
+}
+ .btn-outline{
+    background-color: white;
+    color: var(--orange-600);
+    border: 1px solid var(--orange-600);
+ }

@@ -36,7 +36,8 @@
                             <td>{{ product.price | currency:'EUR':'symbol'}}</td>
                             <td>{{ product.Category.name }}</td>
                             <td>{{ product.stock }}</td>
-                            <td>{{ product.description }}</td>
+                            <!-- <td>{{ product.description}}</td> -->
+                            <td>{{ product.description?.slice(0, 50) + (product.description.length > 50 ? '...' : '') }}</td>
                             <td>
                                 <p-button (click)="deleteProduct(product.id)" styleClass="p-button-danger rounded mr-2"
                                     icon="pi pi-trash"></p-button>

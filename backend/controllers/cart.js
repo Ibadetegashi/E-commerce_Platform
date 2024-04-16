@@ -31,13 +31,13 @@ const addToCart = async (req, res) => {
         if (existingCartItem) {
             // Update quantity if the item exists
             if (fixedQuantity) {
-                existingCartItem.quantit = quantity;
+                existingCartItem.quantity = quantity;
             } else {
-                existingCartItem.quantit += quantity;
+                existingCartItem.quantity += quantity;
             }
             await prisma.cartItem.update({
                 where: { id: existingCartItem.id },
-                data: { quantit: existingCartItem.quantit }
+                data: { quantity: existingCartItem.quantity }
             });
         } else {
             // Create a new cart item if it doesn't exist
@@ -53,7 +53,7 @@ const addToCart = async (req, res) => {
                             id: productId,
                         },
                     },
-                    quantit: quantity,
+                     quantity,
                 },
             });
         }
@@ -183,4 +183,51 @@ const emptyCart = async (req, res) => {
     }
 };
 
-module.exports = { addToCart, removeItemFromCart, getCartOfLoggedUser, emptyCart }
+const reOrder = async (req, res) => {
+    try {
+        const userId = parseInt(req.user.userId);
+        const { items } = req.body;
+
+        // Check if a cart already exists for the user
+        let cart = await prisma.cart.findFirst({
+            where: {
+                userId: userId,
+            }
+        });
+
+        if (cart) {
+            await prisma.cart.delete({
+                where: {
+                    id: cart.id
+                }
+            });
+        }
+        cart = await prisma.cart.create({
+            data: {
+                userId: userId,
+                items: {
+                    create: items.map((item) => {
+                        return {
+                            productId: item.productId,
+                            quantity: item.quantity
+                        };
+                    })
+                }
+            },
+            include: {
+                items: true
+            }
+        });
+
+        res.status(200).json(cart);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json("Internal Server Error");
+    }
+};
+
+
+
+
+
+module.exports = { addToCart, removeItemFromCart, getCartOfLoggedUser, emptyCart, reOrder }
