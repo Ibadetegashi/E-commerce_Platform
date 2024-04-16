@@ -19,21 +19,17 @@ export class CartService {
 
   loadCart() {
     this.getItemLoggedInUser().subscribe((res: any) => {
-        const items = res.data?.items || [];
+      const items = res.data?.items || [];
         this.cart$.next(items);
       },(error) => {
         console.error('Error loading cart:', error);
       }
     );
   }
-  
-
   addItemToCart(productId: number, quantity: number, fixedQuantity: boolean) {
     return this.http.post(`${this.url}`, { productId, quantity, fixedQuantity })
       .subscribe((res:any) => {
-       
-        
-        this.cart$.next(res.items)
+      this.cart$.next(res.items);
         setTimeout(() => {
            this.messageService.add(
           {
@@ -45,7 +41,10 @@ export class CartService {
       });
   }
 
-  
+  reorder(items: any) {
+    return this.http.post(`${this.url}/reorder`, {items})
+  }
+
   getItemLoggedInUser() {
     return this.http.get(`${this.url}`);
   }
@@ -60,5 +59,7 @@ export class CartService {
       console.log('karta emptpy',this.cart$);
     })
   }
+
+  
 
 }

@@ -53,7 +53,7 @@ export class CheckoutComponent implements OnInit {
       this.orderItems = res.data.items.map((item: any) => {
         return {
           productId: item.productId,
-          quantity: item.quantit
+          quantity: item.quantity
         }
       })
     console.log(this.orderItems);

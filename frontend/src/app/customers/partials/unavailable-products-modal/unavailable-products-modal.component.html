@@ -1,0 +1,30 @@
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+            <!-- <div class="modal-header">
+                <h1 class="modal-title fs-5 orange" id="exampleModalLabel">Reorder </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div> -->
+            <div class="modal-body">
+                <ng-container *ngIf="orderItemsWithoutStock.length > 0; else allProductsAvailable">
+                <p class=" h5">The following products are not available because we do not have enough stock:</p><br>
+                <ul class="list-group ">
+                    <li *ngFor="let item of orderItemsWithoutStock, let i=index" class="list-group-item orange h6">
+                       {{i+1 + '.'}} {{ item.Product.name }} (Quantity: {{ item.quantity }})
+                    </li>
+                </ul>
+                <p class="mt-3 orange h5">Do you want to add only the available products to your cart?</p>
+                
+                </ng-container>
+                <ng-template #allProductsAvailable>
+                    <!-- <p class="fw-bold orange h3">All products in this order are available.</p> -->
+                    <p class="mt-3 orange h4">Are you sure you want to put all these order items to the cart?</p>
+                </ng-template>
+                
+                <button type="button" class="btn btn-outline" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn" data-bs-dismiss="modal" (click)="continueAddingToCart()">Continue</button>
+            </div>
+         
+        </div>
+    </div>
+</div>

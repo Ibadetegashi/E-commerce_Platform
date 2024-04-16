@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit {
    items: MenuItem[] | undefined;
   constructor(private cartService: CartService, private authService: AuthService, private router:Router) {}
   ngOnInit(): void {
+    //this.cartService.loadCart()
     this.isAdmin =   this.authService.isAdmin();
     this.cartService.cart$.subscribe((cart: any) => {
       this.cartCount = cart?.length ?? 0
