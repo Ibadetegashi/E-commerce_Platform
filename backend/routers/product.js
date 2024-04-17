@@ -12,7 +12,9 @@ const {
     setProductCategory,
     editProduct,
     deleteProduct,
-    getProductsPagination
+    getProductsPagination,
+    addReview,
+    getReviewsByProductId
 } = require('../controllers/product.js')
 
 const { isAdmin, isAuth } = require('../middlewares/verifyToken.js')
@@ -27,6 +29,8 @@ router.get('/:id',isAuth, getProductById)
 
 router.put('/category', isAdmin, setProductCategory)
 router.delete('/:id', isAdmin, deleteProduct)
-router.put('/:id', isAdmin, uploading, editProductValidation, handleValidationErrors, editProduct) 
+router.put('/:id', isAdmin, uploading, editProductValidation, handleValidationErrors, editProduct)
 
+router.post('/review', isAuth, addReview) 
+router.get('/review/:id', isAuth, getReviewsByProductId)
 module.exports = router

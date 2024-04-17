@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { connect } = require('tls');
 const prisma = new PrismaClient();
 
 const createProduct = async (req, res) => {
@@ -193,12 +194,12 @@ const getProductsPagination = async (req, res) => {
         const { query: { page = 1, limit = 10, categoryId = null, name = '' } } = req;
         const match = {};
         if (categoryId && categoryId !== 'null' && categoryId != undefined) {
-            match.categoryId = +categoryId; 
+            match.categoryId = +categoryId;
         }
         if (name) {
-            match.name = {contains: name}
+            match.name = { contains: name }
         }
-        console.log('match',match);
+        console.log('match', match);
         const products = await prisma.product.findMany({
             skip: (page - 1) * limit,
             take: +limit,
@@ -222,6 +223,61 @@ const getProductsPagination = async (req, res) => {
     }
 }
 
+const addReview = async (req, res) => {
+    try {
+        const { productId, comment, rating } = req.body
+        const userId = +req.user.userId
+
+        const userAlreadyReview = await prisma.review.findFirst({
+            where: {
+                userId,
+                productId
+            }
+        })
+
+        if (userAlreadyReview) {
+            return res.status(403).json({ message: 'You already left a review for this product' })
+        }
+
+        const review = await prisma.review.create({
+            data: {
+                comment,
+                rating: +rating,
+                Product: {
+                    connect: {
+                        id: +productId
+                    }
+                },
+                User: {
+                    connect: {
+                        id: userId
+                    }
+                }
+            }
+        })
+
+        res.status(201).json(review)
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json('Internal Server Error')
+    }
+}
+
+const getReviewsByProductId = async (req, res)=>{
+    try {
+        const reviews = await prisma.review.findMany({ 
+            where:{
+            productId: +req.params.id
+          }    
+        });
+        res.json(reviews)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json('Internal Server Error')
+    }
+}
 module.exports = {
     createProduct,
     getProducts,
@@ -229,5 +285,7 @@ module.exports = {
     setProductCategory,
     editProduct,
     deleteProduct,
-    getProductsPagination
+    getProductsPagination,
+    addReview,
+    getReviewsByProductId
 }
