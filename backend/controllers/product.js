@@ -231,7 +231,7 @@ const addReview = async (req, res) => {
         const userAlreadyReview = await prisma.review.findFirst({
             where: {
                 userId,
-                productId
+                productId: +productId
             }
         })
 
@@ -270,7 +270,17 @@ const getReviewsByProductId = async (req, res)=>{
         const reviews = await prisma.review.findMany({ 
             where:{
             productId: +req.params.id
-          }    
+            },
+            include: {
+                User: {
+                    select: {
+                        firstname:true,
+                    }
+                }
+            },
+            orderBy: {
+              createdAt: 'desc'
+          }  
         });
         res.json(reviews)
     } catch (error) {

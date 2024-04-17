@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { OrderService } from '../../services/order.service';
 import { MessageService } from 'primeng/api';
+import { ReviewService } from '../../services/review.service';
 
 @Component({
   selector: 'app-product-details',
@@ -14,7 +15,7 @@ export class ProductDetailsComponent implements OnInit {
   product: any
   id!: number
   quantity = 1
-  cart!: any []
+  cart!: any[]
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -51,4 +52,6 @@ export class ProductDetailsComponent implements OnInit {
       }) : this.cartService.addItemToCart(this.id, this.quantity, false);
     }
   }
+
+
 }

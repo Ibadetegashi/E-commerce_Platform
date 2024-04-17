@@ -1,0 +1,54 @@
+<h1 class="orange">Leave a comment</h1>
+<span class="text-warning" *ngIf="message">{{message}}</span>
+<div class="mt-4 mb-4 w-50">
+    <div class="mb-3">
+        <label for="comment" class="form-label orange">Comment</label>
+        <textarea [ngClass]="{'is-invalid': error?.comment}" type="text" class="form-control" id="comment" name="comment" [(ngModel)]="review.comment"></textarea>
+        <span class="text-danger" *ngIf="error?.comment">{{error?.comment?.msg}}</span>
+    </div>
+    <div class="mb-3">
+        <label for="rating" class="form-label orange">Rating</label><br>
+        <p-rating [(ngModel)]="review.rating"  [pTooltip]="'Rate the product'" [title]="'Select rating'" ></p-rating>
+        <!-- <select [ngClass]="{'is-invalid': error?.rating}" class="form-select" id="rating" name="rating" [(ngModel)]="review.rating" required>
+            <option *ngFor="let i of ratings" [value]="i">{{ i }}</option>
+        </select> -->
+        <br>
+        <span class="text-danger" *ngIf="error?.rating">{{error?.rating?.msg}}</span>
+
+    </div>
+    <button (click)="submitReview()" type="submit" pButton pRipple type="button" label="Submit Review" class="rounded button"></button>
+</div>
+<hr>
+<!-- <div class="accordion" id="accordionExample">
+    <div  class="accordion-item" *ngFor="let review of reviews; let index = index;">
+        <h2 class="accordion-header m-0">
+            <button class="accordion-button collapsed p-2 orange" type="button" data-bs-toggle="collapse"
+                [attr.data-bs-target]="'#collapseOne'+index" 
+                [attr.aria-controls]="'collapseOne'+index"  aria-expanded="true">
+                <i class="bi bi-star"></i> &nbsp; <b *ngIf="review.rating !== null; else notRated">
+                    {{ review.rating }} / 5 &nbsp;
+                </b>
+                <ng-template #notRated><b>0/5 &nbsp;</b></ng-template>
+                Review #{{index+1}}
+              
+            </button>
+        </h2>
+        <div [id]="'collapseOne'+index" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <p>{{review.comment}}</p>
+                <p class="blockquote-footer">{{review.User.firstname}}</p>
+                <p>Created: <i>{{review.createdAt | date:'MMM d, y HH:mm a'}}</i> </p>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="reviews?.length===0">No reviews yet.</div>
+</div> -->
+<p-accordion class="mb-0" [multiple]="true" *ngFor="let review of reviews; let index = index;">
+    <p-accordionTab [header]="'Review  ' + (index + 1)" [headerStyle]="{color : 'var(--orange-600)'}" [iconPos]="'end'">
+        <div class="accordion-body">
+            <p>{{review.comment}}</p><br>
+            <p class="blockquote-footer">{{review.User.firstname}}</p>
+            <p class="date">Created: <i>{{review.createdAt | date:'MMM d, y HH:mm a'}}</i> </p>
+        </div>
+    </p-accordionTab>
+</p-accordion>
