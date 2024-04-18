@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ReviewService } from '../../services/review.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { RatingRateEvent } from 'primeng/rating';
 
@@ -27,7 +27,8 @@ export class ReviewDetailsComponent {
    constructor(
      private reviewService: ReviewService,
      private messageService: MessageService,
-     private authService: AuthService
+     private authService: AuthService,
+     private confirmationService: ConfirmationService
    ) { }
   
   ngOnInit(): void {
@@ -69,10 +70,36 @@ export class ReviewDetailsComponent {
   setRating(value: number) {
     this.review.rating = value
 }
-deleteReview(_t44: number) {
-throw new Error('Method not implemented.');
-}
-  
+
+   deleteReview(id: number) {
+     this.confirmationService.confirm({
+      message: 'Are you sure you want to delete your review for this product?',
+      header: 'Delete Review',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.reviewService
+          .deleteReview(id)
+          .subscribe(
+            (res:any) => {
+              this.getReviews()
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: res.message
+              });
+            },
+            (err) => {
+              console.log(err);
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Review is not deleted!'
+              });
+            }
+          );
+      }
+    });
+  }
 private sortReviews(reviews: any[]): any[] {
   const firstUserReviewIndex = reviews.findIndex(review => review.userId === this.userId);
 

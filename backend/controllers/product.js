@@ -288,6 +288,31 @@ const getReviewsByProductId = async (req, res)=>{
         res.status(500).json('Internal Server Error')
     }
 }
+
+const deleteReview = async (req, res) => { 
+    try {
+        const findReview = await prisma.review.findUnique({
+            where: {
+                id: +req.params.id
+            }
+        })
+
+        if (!findReview) {
+            return res.status(404).json('Review Not Found')
+        }
+
+        await prisma.review.delete({
+            where: {
+                id: +req.params.id
+            }
+        })
+
+        res.json({ deletedReview: findReview, message:'The review was deleted successfully.'})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json('Internal Server Error')
+    }
+}
 module.exports = {
     createProduct,
     getProducts,
@@ -297,5 +322,6 @@ module.exports = {
     deleteProduct,
     getProductsPagination,
     addReview,
-    getReviewsByProductId
+    getReviewsByProductId,
+    deleteReview
 }

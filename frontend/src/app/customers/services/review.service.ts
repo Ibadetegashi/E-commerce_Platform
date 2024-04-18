@@ -17,4 +17,8 @@ export class ReviewService {
   addReview(review: object) {
     return this.http.post(`${this.url}/product/review`, review)
   }
+
+  deleteReview(id: number) { 
+    return this.http.delete(`${this.url}/product/review/${id}`);
+  }
 }

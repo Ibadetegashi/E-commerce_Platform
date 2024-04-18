@@ -15,7 +15,8 @@ const {
     deleteProduct,
     getProductsPagination,
     addReview,
-    getReviewsByProductId
+    getReviewsByProductId,
+    deleteReview
 } = require('../controllers/product.js')
 
 const { isAdmin, isAuth } = require('../middlewares/verifyToken.js')
@@ -33,5 +34,6 @@ router.delete('/:id', isAdmin, deleteProduct)
 router.put('/:id', isAdmin, uploading, editProductValidation, handleValidationErrors, editProduct)
 
 router.post('/review', isAuth, addReviewValidation, handleValidationErrors, addReview)
-router.get('/review/:id',isAuth, getReviewsByProductId)
+router.get('/review/:id', isAuth, getReviewsByProductId)
+router.delete('/review/:id', isAuth, deleteReview)
 module.exports = router
