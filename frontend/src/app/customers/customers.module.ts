@@ -29,7 +29,9 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { PaginatorModule } from 'primeng/paginator';
 import { UnavailableProductsModalComponent } from './partials/unavailable-products-modal/unavailable-products-modal.component';
-
+import { ReviewDetailsComponent } from './partials/review-details/review-details.component';
+import { RatingModule } from 'primeng/rating';
+import {AccordionModule} from 'primeng/accordion';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -43,6 +45,7 @@ import { UnavailableProductsModalComponent } from './partials/unavailable-produc
     OrderHistoryComponent,
     OrderHistoryDetailsComponent,
     UnavailableProductsModalComponent,
+    ReviewDetailsComponent,
   ],
   imports: [
     CommonModule,
@@ -64,7 +67,10 @@ import { UnavailableProductsModalComponent } from './partials/unavailable-produc
     TagModule,
     MenubarModule,
     ConfirmDialogModule,
-    PaginatorModule
+    PaginatorModule,
+    RatingModule,
+    AccordionModule
+    
   ],
   exports: [],
   providers:[MessageService]

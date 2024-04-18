@@ -36,9 +36,15 @@ const createCategoryValidation = [
         .isLength({ min: 2, max: 20 }).withMessage('Category name must be between 2 and 20 characters.'),
 ]
 
+const addReviewValidation = [
+    body('comment').trim().notEmpty().withMessage('Comment is required.')
+        .isLength({ min: 3, max: 100 }).withMessage('Comment should contain at least 3 characters and not more than 100.'),
+]
+
 
 module.exports = {
     editProductValidation,
     createProductValidation,
-    createCategoryValidation
+    createCategoryValidation,
+    addReviewValidation
 }

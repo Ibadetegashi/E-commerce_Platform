@@ -1,0 +1,20 @@
+.button,
+.accordion-button:focus,
+.accordion-button:active,
+.accordion-button:not(.collapsed){
+background-color: var(--orange-600);
+    color: white;
+    border: none
+}
+
+.orange{
+    color: var(--orange-600);
+}
+
+.date{
+    font-size: smaller;
+}
+
+:host ::ng-deep .p-accordion p-accordiontab .p-accordion-tab {
+      margin-bottom: 0px !important;
+}

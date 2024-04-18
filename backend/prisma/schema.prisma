@@ -23,13 +23,14 @@ model User {
   updatedAt         DateTime @updatedAt
   Order             Order[]
   Cart              Cart?
+  Reviews            Review[]
 }
 
 model Product {
   id          Int          @id @default(autoincrement())
   name        String
-  price       Decimal @db.Decimal(10,2)
-  stock        Int @default(10)
+  price       Decimal      @db.Decimal(10, 2)
+  stock       Int          @default(10)
   description String       @db.VarChar(600)
   image       String       @db.VarChar(255)
   Category    Category?    @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -38,6 +39,7 @@ model Product {
   updatedAt   DateTime     @updatedAt
   OrderItems  OrderItems[]
   CartItem    CartItem[]
+  Reviews      Review[]
 }
 
 model Category {
@@ -88,7 +90,19 @@ model CartItem {
   id        Int     @id @default(autoincrement())
   cartId    Int
   productId Int
-  quantity Int
+  quantity  Int
   Product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Cart      Cart?   @relation(fields: [cartId], references: [id], onDelete: Cascade,onUpdate: Cascade)
+  Cart      Cart?   @relation(fields: [cartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Review {
+  id        Int     @id @default(autoincrement())
+  comment   String
+  rating    Int
+  productId Int
+  userId    Int
+  User      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
 }

@@ -1,0 +1,31 @@
+<h1 class="orange">Leave a comment</h1>
+<span class="text-warning" *ngIf="message">{{message}}</span>
+<div class="mt-4 mb-4 w-50">
+    <div class="mb-3">
+        <label for="comment" class="form-label orange">Comment</label>
+        <textarea [ngClass]="{'is-invalid': error?.comment}" type="text" class="form-control" id="comment" name="comment" [(ngModel)]="review.comment"></textarea>
+        <span class="text-danger" *ngIf="error?.comment">{{error?.comment?.msg}}</span>
+    </div>
+    <div class="mb-3">
+        <label for="rating" class="form-label orange">Rating</label><br>
+        <p-rating [(ngModel)]="review.rating"  [pTooltip]="'Rate the product'" [title]="'Select rating'" ></p-rating>
+        <br>
+        <span class="text-danger" *ngIf="error?.rating">{{error?.rating?.msg}}</span>
+
+    </div>
+    <button (click)="submitReview()" type="submit" pButton pRipple type="button" label="Submit Review" class="rounded button"></button>
+</div>
+<hr>
+<p-accordion class="mb-0" [multiple]="true" *ngFor="let review of reviews; let index = index;" >
+    <p-accordionTab [header]="'Review  ' + (index + 1)" [headerStyle]="{color : 'var(--orange-600)'}" [iconPos]="'end'" [selected]="userId === review.userId">
+        <div class="accordion-body">
+            <p>{{review.comment}}</p><br>
+            <p class="blockquote-footer">{{review.User.firstname}}</p>
+            <p class="date">Created: <i>{{review.createdAt | date:'MMM d, y HH:mm a'}}</i> </p>
+            <button *ngIf="userId === review.userId" class="btn btn-danger" (click)="deleteReview(review.id)">Delete</button>
+        </div>
+    </p-accordionTab>
+</p-accordion>
+
+<p-confirmDialog [style]="{ width: '50vw' }" [baseZIndex]="10000" styleClass="custom-confirm-dialog"
+    rejectButtonStyleClass="p-button-text"></p-confirmDialog>
