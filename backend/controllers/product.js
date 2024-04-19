@@ -191,13 +191,16 @@ const deleteProduct = async (req, res) => {
 
 const getProductsPagination = async (req, res) => {
     try {
-        const { query: { page = 1, limit = 10, categoryId = null, name = '' } } = req;
+        const { query: { page = 1, limit = 10, categoryName='', search = '' } } = req;
         const match = {};
-        if (categoryId && categoryId !== 'null' && categoryId != undefined) {
-            match.categoryId = +categoryId;
-        }
-        if (name) {
-            match.name = { contains: name }
+        // if (categoryId && categoryId !== 'null' && categoryId != undefined) {
+        //     match.categoryId = +categoryId;
+        // }
+        if (search) {
+            match.OR = [
+                { name: { contains: search } },  
+                { Category: { name: { contains: search } } }  
+            ];
         }
         console.log('match', match);
         const products = await prisma.product.findMany({
@@ -313,6 +316,8 @@ const deleteReview = async (req, res) => {
         res.status(500).json('Internal Server Error')
     }
 }
+
+
 module.exports = {
     createProduct,
     getProducts,

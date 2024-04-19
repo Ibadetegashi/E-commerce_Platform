@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -10,11 +10,13 @@ import { NavigationEnd, Router } from '@angular/router';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-      isProfileActive: boolean = false;
-    isOrderHistoryActive: boolean = false;
+  name: string = '';
+
+  @Output() searchChange: EventEmitter<string> = new EventEmitter<string>();
+  isProfileActive: boolean = false;
+  isOrderHistoryActive: boolean = false;
   cartCount = 0
   isAdmin!: boolean
-   items: MenuItem[] | undefined;
   constructor(private cartService: CartService, private authService: AuthService, private router:Router) {}
   ngOnInit(): void {
     //this.cartService.loadCart()
@@ -40,8 +42,15 @@ export class HeaderComponent implements OnInit {
   logOut() {
     this.authService.logout();
   }
-  
-  
- 
+
+  setName() {
+    this.searchChange.emit(this.name);
+    if (this.name.trim() === '') {
+    this.router.navigate(['/products']);
+  } else {
+    this.router.navigate(['/products'], { queryParams: { search: this.name } });
+  }
+  }
+
 
 }

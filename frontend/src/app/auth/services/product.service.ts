@@ -52,10 +52,11 @@ export class ProductService {
   // getProductsPagination(page: number , limit: number, categoryId: number , name: string) {
   //   return this.http.get(`${this.url}?page=${page}&limit=${limit}&categoryId=${categoryId}&name=${name}`)
   // }
-getProductsPagination(pageIndex: number, pageSize: number): Observable<any> {
+getProductsPagination(pageIndex: number, pageSize: number,search:string): Observable<any> {
     let params = new HttpParams()
       .set('page', pageIndex.toString())
-      .set('limit', pageSize.toString());
+      .set('limit', pageSize.toString())
+      .set('search', search)
 
     return this.http.get(this.url, { params: params });
   }

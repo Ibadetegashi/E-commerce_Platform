@@ -1,27 +1,37 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { PaginatorState } from 'primeng/paginator';
 import { ProductService } from 'src/app/auth/services/product.service';
+import { HeaderComponent } from '../../partials/header/header.component';
+import { ActivatedRoute, Route } from '@angular/router';
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.scss']
 })
 export class ProductsListComponent implements OnInit{
+  @Input() name = '';
   categoryId!: number
-   products: any[] = [];
+  products: any[] = [];
   totalRecords: number = 0;
   currentPage: number = 1;
   pageSize: number = 10;
-
-  constructor(private productService: ProductService) {
+  search= ''
  
+
+  constructor(private productService: ProductService, route: ActivatedRoute) {
+    route.queryParams.subscribe(params => {
+      this.search = params['search'] || '';
+      this.loadProducts();
+    });
   }
+  
   ngOnInit(): void {
     this.loadProducts();
+    
   }
 
 loadProducts(): void {
- this.productService.getProductsPagination(this.currentPage, this.pageSize)
+ this.productService.getProductsPagination(this.currentPage, this.pageSize, this.search)
     .subscribe((response: any) => {
       this.products = response.data;
       this.totalRecords = response.totalRecords;
@@ -39,12 +49,5 @@ loadProducts(): void {
     this.loadProducts();
   }
 
-//   console.log(event);
-//    {
-//     "page": 0,
-//     "first": 0,
-//     "rows": 5,
-//     "pageCount": 3
-// }
 
 }
