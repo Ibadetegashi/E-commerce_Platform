@@ -17,7 +17,7 @@
 </div>
 <hr>
 <p-accordion class="mb-0" [multiple]="true" *ngFor="let review of reviews; let index = index;" >
-    <p-accordionTab [header]="'Review  ' + (index + 1)" [headerStyle]="{color : 'var(--orange-600)'}" [iconPos]="'end'" [selected]="userId === review.userId">
+    <p-accordionTab [header]="review.rating+ '/5 Review  ' + (index + 1)" [headerStyle]="{color : 'var(--orange-600)'}" [iconPos]="'end'" [selected]="userId === review.userId">
         <div class="accordion-body">
             <p>{{review.comment}}</p><br>
             <p class="blockquote-footer">{{review.User.firstname}}</p>
@@ -27,5 +27,5 @@
     </p-accordionTab>
 </p-accordion>
 
-<p-confirmDialog [style]="{ width: '50vw' }" [baseZIndex]="10000" styleClass="custom-confirm-dialog"
+<p-confirmDialog [style]="{ width: '50vw' }"  [baseZIndex]="10000" styleClass="custom-confirm-dialog"
     rejectButtonStyleClass="p-button-text"></p-confirmDialog>
