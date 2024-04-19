@@ -67,6 +67,14 @@
                             <div class="col-2 mt-2 pl-0">
                                 <img style="width: 100%" [src]="imageDisplay" alt="" />
                             </div>
+                            <p-fileUpload name="demo[]"  (onUpload)="onUpload($event)" [multiple]="true" accept="image/*"
+                                [maxFileSize]="1000000">
+                                <ng-template pTemplate="content">
+                                    <ul *ngIf="uploadedFiles?.length">
+                                        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                                    </ul>
+                                </ng-template>
+                            </p-fileUpload>
                         </div>
                     </div>
                 </form>

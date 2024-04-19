@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { FileUploadEvent } from 'primeng/fileupload';
 import { Observable } from 'rxjs';
 import { CategoryService } from 'src/app/auth/services/category.service';
 import { ProductService } from 'src/app/auth/services/product.service';
@@ -14,6 +15,11 @@ import { Category } from 'src/app/shared/interfaces/category';
   styleUrls: ['./product-form.component.scss']
 })
 export class ProductFormComponent implements OnInit{
+uploadedFiles: any;
+onUpload($event: FileUploadEvent) {
+  console.log($event);
+  console.log(this.uploadedFiles);
+}
   form!: FormGroup
   isEditMode = false
   categoryOptions$!:Observable<Category[]>

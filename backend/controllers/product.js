@@ -4,28 +4,40 @@ const prisma = new PrismaClient();
 
 const createProduct = async (req, res) => {
     try {
+        console.log(req.body);
+        console.log('req.files', req.files['mainImage']);
+        console.log('req.files', req.files['additionalImages']);
+        
         const { name, description, stock } = req.body;
         const price = Number(req.body.price)
         const categoryId = parseInt(req.body.categoryId)
         // Check if an image file was uploaded
-        if (!req.file) {
-            return res.status(400).json({ message: 'Image is required.' });
+        if (!req.files['mainImage']) {
+            return res.status(400).json({ message: 'Main Image is required.' });
         }
 
         const url = `${process.env.URL}/public/images/`
 
-        const image = req.file.filename;
+        const mainImage = req.files['mainImage'][0].filename;
+        const additionalImages = req.files['additionalImages'].map(image => ({
+            url: `${url}${image.filename}`,
+            productId: null 
+        }));
+        console.log('mainImages',mainImage);
+        console.log('additionalImages', additionalImages);
+        
+        //create product
         const product = await prisma.product.create({
             data: {
                 name,
                 price,
                 description,
-                image: `${url}${image}`,
+                image: `${url}${mainImage}`,
                 categoryId,
                 stock: Number(stock)
             },
             include: {
-                Category: true
+                Category: true,
             }
         });
 
@@ -33,6 +45,14 @@ const createProduct = async (req, res) => {
             return res.status(401).send('Failed creating product.');
         }
 
+        //create image record for each additional image 
+        await prisma.image.createMany({
+            data: additionalImages.map((img, i) => ({
+                url: img.url,
+                productId: product.id
+            }))
+        })
+        
         return res.status(201).send({ message: 'Created Successfully.', data: product });
 
     } catch (error) {
@@ -69,7 +89,12 @@ const getProductById = async (req, res) => {
                 id,
             },
             include: {
-                Category: true
+                Category: true,
+                Images: {
+                    select: {
+                        url: true
+                    }
+                }
             }
         })
         if (!product) {
@@ -81,6 +106,8 @@ const getProductById = async (req, res) => {
         return res.status(500).send('Internal Server Error.');
     }
 }
+
+//if i provide with additional images, the old one will be removed (from images array & Image tabel) and replaced by new ones
 const editProduct = async (req, res) => {
     try {
         const productId = parseInt(req.params.id);
@@ -89,9 +116,16 @@ const editProduct = async (req, res) => {
         const price = Number(req.body.price);
 
         // Check if a new file is provided in the request
-        let image = req.file ? req.file.filename : null;
+        let mainImage = req.files['mainImage'] ? req.files[0].filename : null;
 
         const url = `${process.env.URL}/public/images/`;
+
+        const additionalImages = req.files['additionalImages'] ?
+            req.files['additionalImages'].map(image => ({
+            url: `${url}${image.filename}`,
+            productId: null
+        })) : null;
+
 
         const updatedProduct = await prisma.product.update({
             where: { id: productId },
@@ -100,18 +134,37 @@ const editProduct = async (req, res) => {
                 price,
                 description,
                 // Use the new file if provided, otherwise keep the existing file
-                image: image ? `${url}${image}` : undefined,
+                image: mainImage ? `${url}${image}` : undefined,
                 categoryId,
                 stock: Number(stock)
             },
             include: {
-                Category: true
+                Category: true,
+                Images: true,
             }
         });
 
         if (!updatedProduct) {
             return res.status(404).json({ message: `Product with ID ${productId} not found.`, data: null });
         }
+
+        if (additionalImages && additionalImages.length > 0) {
+            await prisma.image.deleteMany({
+                where: {
+                    productId 
+                }
+            });
+            const createNewImageRecords = [];
+            for (const image of additionalImages) {
+                const newImageRecord = await prisma.image.create({
+                    data: { url: image.url, productId }
+                });
+                createNewImageRecords.push(newImageRecord);
+            }
+            updatedProduct.Images = createNewImageRecords;
+        }
+    
+      
 
         return res.status(200).json({ message: `Product with ID ${productId} updated successfully.`, data: updatedProduct });
 
