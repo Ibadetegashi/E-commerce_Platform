@@ -7,7 +7,7 @@ const createProduct = async (req, res) => {
         console.log(req.body);
         console.log('req.files', req.files['mainImage']);
         console.log('req.files', req.files['additionalImages']);
-        
+
         const { name, description, stock } = req.body;
         const price = Number(req.body.price)
         const categoryId = parseInt(req.body.categoryId)
@@ -19,13 +19,13 @@ const createProduct = async (req, res) => {
         const url = `${process.env.URL}/public/images/`
 
         const mainImage = req.files['mainImage'][0].filename;
-        const additionalImages = req.files['additionalImages'].map(image => ({
+        const additionalImages = req.files['additionalImages'] ? req.files['additionalImages'].map(image => ({
             url: `${url}${image.filename}`,
-            productId: null 
-        }));
-        console.log('mainImages',mainImage);
+            productId: null
+        })) : null
+        console.log('mainImages', mainImage);
         console.log('additionalImages', additionalImages);
-        
+
         //create product
         const product = await prisma.product.create({
             data: {
@@ -46,13 +46,16 @@ const createProduct = async (req, res) => {
         }
 
         //create image record for each additional image 
-        await prisma.image.createMany({
-            data: additionalImages.map((img, i) => ({
-                url: img.url,
-                productId: product.id
-            }))
-        })
-        
+        if (additionalImages) { 
+            await prisma.image.createMany({
+                data: additionalImages.map((img, i) => ({
+                    url: img.url,
+                    productId: product.id
+                }))
+            })
+        }
+     
+
         return res.status(201).send({ message: 'Created Successfully.', data: product });
 
     } catch (error) {
@@ -114,18 +117,21 @@ const editProduct = async (req, res) => {
         const { name, description, stock } = req.body;
         const categoryId = Number(req.body.categoryId);
         const price = Number(req.body.price);
+        const previewsImagesUrl = JSON.parse(req.body.previewsImagesUrl);
 
-        // Check if a new file is provided in the request
-        let mainImage = req.files['mainImage'] ? req.files[0].filename : null;
+        let mainImage = req.files['mainImage'] ? req.files['mainImage'][0].filename : null;
 
         const url = `${process.env.URL}/public/images/`;
 
         const additionalImages = req.files['additionalImages'] ?
             req.files['additionalImages'].map(image => ({
-            url: `${url}${image.filename}`,
-            productId: null
-        })) : null;
+                url: `${url}${image.filename}`,
+                productId: null
+            })) : null;
 
+        console.log('previewsImagesUrl');
+        console.log(previewsImagesUrl);
+        console.log('addimg', additionalImages);
 
         const updatedProduct = await prisma.product.update({
             where: { id: productId },
@@ -133,10 +139,9 @@ const editProduct = async (req, res) => {
                 name,
                 price,
                 description,
-                // Use the new file if provided, otherwise keep the existing file
-                image: mainImage ? `${url}${image}` : undefined,
+                image: mainImage ? `${url}${mainImage}` : undefined,
                 categoryId,
-                stock: Number(stock)
+                stock: Number(stock),
             },
             include: {
                 Category: true,
@@ -147,24 +152,42 @@ const editProduct = async (req, res) => {
         if (!updatedProduct) {
             return res.status(404).json({ message: `Product with ID ${productId} not found.`, data: null });
         }
+        
+        const existingImageUrls = updatedProduct.Images.map(image => image.url);
+
+        
+        const existingImagesToKeep = updatedProduct.Images.filter(image => {
+            return previewsImagesUrl.some(url => image.url.includes(url.url));
+        });
+
+        const deleteExistingImages = updatedProduct.Images.filter(image => {
+            return !previewsImagesUrl.some(url => image.url.includes(url.url));
+        });
+
+        console.log('existingImagesToKeep', existingImagesToKeep);
+        console.log('deleteExistingImages', deleteExistingImages);
+
 
         if (additionalImages && additionalImages.length > 0) {
-            await prisma.image.deleteMany({
-                where: {
-                    productId 
-                }
-            });
             const createNewImageRecords = [];
             for (const image of additionalImages) {
                 const newImageRecord = await prisma.image.create({
                     data: { url: image.url, productId }
                 });
-                createNewImageRecords.push(newImageRecord);
+                createNewImageRecords.push(newImageRecord.url);
             }
-            updatedProduct.Images = createNewImageRecords;
+            updatedProduct.Images = [...createNewImageRecords, ...existingImageUrls];
+            console.log('updatedProduct');
+            console.log(updatedProduct.Images);
         }
-    
-      
+        
+        for (const image of deleteExistingImages) {
+            await prisma.image.delete({
+                where: {
+                    id: image.id 
+                }
+            });
+        }
 
         return res.status(200).json({ message: `Product with ID ${productId} updated successfully.`, data: updatedProduct });
 
@@ -173,6 +196,7 @@ const editProduct = async (req, res) => {
         return res.status(500).send('Internal Server Error.');
     }
 };
+
 
 const setProductCategory = async (req, res) => {
     try {
@@ -244,15 +268,15 @@ const deleteProduct = async (req, res) => {
 
 const getProductsPagination = async (req, res) => {
     try {
-        const { query: { page = 1, limit = 10, categoryName='', search = '' } } = req;
+        const { query: { page = 1, limit = 10, categoryName = '', search = '' } } = req;
         const match = {};
         // if (categoryId && categoryId !== 'null' && categoryId != undefined) {
         //     match.categoryId = +categoryId;
         // }
         if (search) {
             match.OR = [
-                { name: { contains: search } },  
-                { Category: { name: { contains: search } } }  
+                { name: { contains: search } },
+                { Category: { name: { contains: search } } }
             ];
         }
         console.log('match', match);
@@ -321,22 +345,22 @@ const addReview = async (req, res) => {
     }
 }
 
-const getReviewsByProductId = async (req, res)=>{
+const getReviewsByProductId = async (req, res) => {
     try {
-        const reviews = await prisma.review.findMany({ 
-            where:{
-            productId: +req.params.id
+        const reviews = await prisma.review.findMany({
+            where: {
+                productId: +req.params.id
             },
             include: {
                 User: {
                     select: {
-                        firstname:true,
+                        firstname: true,
                     }
                 }
             },
             orderBy: {
-              createdAt: 'desc'
-          }  
+                createdAt: 'desc'
+            }
         });
         res.json(reviews)
     } catch (error) {
@@ -345,7 +369,7 @@ const getReviewsByProductId = async (req, res)=>{
     }
 }
 
-const deleteReview = async (req, res) => { 
+const deleteReview = async (req, res) => {
     try {
         const findReview = await prisma.review.findUnique({
             where: {
@@ -363,7 +387,7 @@ const deleteReview = async (req, res) => {
             }
         })
 
-        res.json({ deletedReview: findReview, message:'The review was deleted successfully.'})
+        res.json({ deletedReview: findReview, message: 'The review was deleted successfully.' })
     } catch (error) {
         console.log(error);
         res.status(500).json('Internal Server Error')

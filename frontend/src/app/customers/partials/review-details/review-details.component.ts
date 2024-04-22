@@ -58,7 +58,8 @@ export class ReviewDetailsComponent {
             severity: 'success',
             summary: 'Success',
             detail: 'Comment added successfully'
-          });
+         });
+      this.review.comment = ''
     }, err => {
       console.log(err);
       this.message = err.error.message

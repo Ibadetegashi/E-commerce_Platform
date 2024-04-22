@@ -38,7 +38,7 @@ const createCategoryValidation = [
 
 const addReviewValidation = [
     body('comment').trim().notEmpty().withMessage('Comment is required.')
-        .isLength({ min: 3, max: 100 }).withMessage('Comment should contain at least 3 characters and not more than 100.'),
+        .isLength({ min: 3, max: 200 }).withMessage('Comment should contain at least 3 characters and not more than 200.'),
 ]
 
 

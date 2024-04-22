@@ -61,6 +61,7 @@ const storage = multer.diskStorage({
             const err = new multer.MulterError("You can only upload image files");
             err.code = "WRONG_MIMETYPE",
             err.message = "Only image files are allowed";
+            err.field = file.fieldname
             cb(err);
         }
     },
@@ -82,7 +83,8 @@ const uploading = (req, res, next) => {
     ])(req, res, (err) => {
           if (err) {
                 console.log(err);
-                if (err instanceof multer.MulterError) {
+              if (err instanceof multer.MulterError) {
+                    console.log(err, 'Multer error');
                     return handleMulterError(err,res)
                 } else {
                     return res.status(500).json({ error: 'Internal server error', err });
