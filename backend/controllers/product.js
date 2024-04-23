@@ -154,7 +154,7 @@ const editProduct = async (req, res) => {
         }
         
         const existingImageUrls = updatedProduct.Images.map(image => image.url);
-
+        console.log('Images BEFORE',updatedProduct.Images);
         
         const existingImagesToKeep = updatedProduct.Images.filter(image => {
             return previewsImagesUrl.some(url => image.url.includes(url.url));
@@ -174,11 +174,13 @@ const editProduct = async (req, res) => {
                 const newImageRecord = await prisma.image.create({
                     data: { url: image.url, productId }
                 });
-                createNewImageRecords.push(newImageRecord.url);
+                createNewImageRecords.push(newImageRecord);
             }
-            updatedProduct.Images = [...createNewImageRecords, ...existingImageUrls];
+            updatedProduct.Images = [...createNewImageRecords, ...existingImagesToKeep];
             console.log('updatedProduct');
             console.log(updatedProduct.Images);
+            console.log('Images AFTER', updatedProduct.Images);
+
         }
         
         for (const image of deleteExistingImages) {

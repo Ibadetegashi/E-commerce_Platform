@@ -88,6 +88,7 @@ export class ReviewDetailsComponent {
                 summary: 'Success',
                 detail: res.message
               });
+              this.message = ''
             },
             (err) => {
               console.log(err);
