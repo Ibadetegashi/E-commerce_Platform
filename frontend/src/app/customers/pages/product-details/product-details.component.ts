@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { OrderService } from '../../services/order.service';
 import { MessageService } from 'primeng/api';
 import { ReviewService } from '../../services/review.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
@@ -13,10 +14,11 @@ import { ReviewService } from '../../services/review.service';
 export class ProductDetailsComponent implements OnInit {
 
   product: any
-  id!: number
+  id!:number 
   quantity = 1
   cart!: any[]
   selectedImg: any = ''
+  suggestedProducts:any[] = []
   
 
   constructor(
@@ -25,18 +27,25 @@ export class ProductDetailsComponent implements OnInit {
     private cartService: CartService,
     private messageService: MessageService
   ) {
-    this.activatedRoute.params.subscribe((data: any) => {
-      this.id = data.id;
-    });
-    orderService.getProduct(this.id).subscribe((res: any) => { 
-      this.product = res.data;
-      this.selectedImg = this.product.image
-    });
+   
   }
   ngOnInit(): void {
     this.cartService.cart$.subscribe((cart: any) => {
       this.cart = cart
     })
+        this.activatedRoute.paramMap.pipe(
+      switchMap((params: ParamMap) => {
+        this.id = +params.get('id')!;
+        return this.orderService.getProduct(this.id);
+      })
+    ).subscribe((res: any) => {
+      this.product = res.data;
+      this.selectedImg = this.product.image;
+      this.getSuggestedProducts();
+       window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    
   }
 
   addProductToCart() {
@@ -63,7 +72,14 @@ export class ProductDetailsComponent implements OnInit {
   
  isActive(img: any): boolean {
    return this.selectedImg === img.url;
-}
+  }
+  
+  getSuggestedProducts() {
+    this.orderService.getSuggestedProducts(this.product.Category.id).subscribe((response: any) => { 
+      console.log(response);
+      this.suggestedProducts = response.data;
+    })
+  }
 
 
 }

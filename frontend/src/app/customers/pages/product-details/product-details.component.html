@@ -36,14 +36,9 @@
                 <div class="row">
                     <div class="col-md-3" *ngFor="let img of product.Images">
                         <div class="image-container">
-                            <img 
-                            [src]="img.url"
-                            class="img-fluid mb-4 additional-image cursor-pointer"
-                            alt=""
-                            (mouseover)="selectImg(img)"
-                            (mouseleave)="selectedImg = product?.image"
-                            [class.active]="isActive(img)"
-                            >
+                            <img [src]="img.url" class="img-fluid mb-4 additional-image cursor-pointer" alt=""
+                                (mouseover)="selectImg(img)" (mouseleave)="selectedImg = product?.image"
+                                [class.active]="isActive(img)">
                         </div>
                     </div>
                 </div>
@@ -52,4 +47,15 @@
     </div>
     <app-review-details [id]="id"></app-review-details>
     <br><br>
+    <div class="container mt-5 mb-5">
+        <h1 class="mb-4 orange">Suggested Products</h1>
+        <div class="row">
+            <ng-container *ngFor="let suggested of suggestedProducts">
+                <div class="col-md-3 gy-3" *ngIf="suggested.id !== product.id">
+                    <app-product-item [product]="suggested"></app-product-item>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
 </div>

@@ -37,4 +37,8 @@ getOrderDetails(id:number) {
   editAddress(orderid: number, address: Object) {
     return this.http.patch(`${this.url}/order/client/${orderid}`, address)
   }
+
+    getSuggestedProducts(id: number) { 
+    return this.http.get(`${this.url}/category/product/${id}`);
+  }
 }
