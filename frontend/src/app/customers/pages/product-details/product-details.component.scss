@@ -26,3 +26,10 @@
     font-weight: bolder;
 }
 
+.additional-image {
+    border: 2px solid transparent;
+}
+
+.additional-image.active {
+    border-color: #EE7214;
+}

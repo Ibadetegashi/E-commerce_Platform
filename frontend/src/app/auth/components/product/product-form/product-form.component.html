@@ -5,9 +5,8 @@
             <div class="col-12">
                 <p-toolbar>
                     <div class="p-toolbar-group-left">
-                        <p-button (click)="isEditMode ? updateProduct() : createProduct()"
-                            styleClass="greenButton" 
-                            [label]= "isEditMode ? 'Update': 'Create'" icon="pi pi-plus">
+                        <p-button (click)="isEditMode ? updateProduct() : createProduct()" styleClass="greenButton"
+                            [label]="isEditMode ? 'Update': 'Create'" icon="pi pi-plus">
                         </p-button>
                     </div>
                     <div class="p-toolbar-group-left">
@@ -44,29 +43,55 @@
                         </div>
                         <div class="field col-6">
                             <label for="stock">Stock</label>
-                            <p-inputNumber formControlName="stock" [ngClass]="{'ng-dirty ng-invalid': error?.stock}" inputId="stock"
-                                ></p-inputNumber>
+                            <p-inputNumber formControlName="stock" [ngClass]="{'ng-dirty ng-invalid': error?.stock}"
+                                inputId="stock"></p-inputNumber>
                             <span class="text-danger" *ngIf="error?.stock">{{ error.stock.msg }}</span>
                         </div>
 
-                        <div class="field col-6">
+                        <div class="field col-12">
                             <label for="Category">Category</label>
-                            <p-dropdown *ngIf="categoryOptions$ | async as categoryOptions" formControlName="Category" [options]="categoryOptions" optionLabel="name"
+                            <p-dropdown *ngIf="categoryOptions$ | async as categoryOptions" formControlName="Category"
+                                [options]="categoryOptions" optionLabel="name"
                                 [ngClass]="{'ng-dirty ng-invalid':error?.Category}" [filter]="true" filterBy="name"
                                 [showClear]="true" placeholder="Select a Category"></p-dropdown>
                             <span class="text-danger" *ngIf="error?.Category">{{ error.Category.msg }}</span>
                         </div>
 
-                        <div class="field col-6">
-                            <label for="name">Image</label>
+                        <div class="field col-12">
+                            <label for="name">Main Image</label>
                             <input type="file" class="p-inputtext" accept="image/*"
-                                [ngClass]="{'ng-dirty ng-invalid': fileError}" (change)="onImageUpload($event)"  [ngClass]="{'ng-dirty ng-invalid': multerError || fileError}" />
+                                [ngClass]="{'ng-dirty ng-invalid': fileError}" (change)="onImageUpload($event)"
+                                [ngClass]="{'ng-dirty ng-invalid': multerError?.field==='mainImage' || fileError}" />
                             <span class="text-danger" *ngIf="fileError">{{fileError}}</span>
-                            <span class="text-danger" *ngIf="multerError">{{multerError}}</span>
+                            <span class="text-danger" *ngIf="multerError?.field === 'mainImage'">{{ multerError?.details }}</span>
+
 
                             <div class="col-2 mt-2 pl-0">
                                 <img style="width: 100%" [src]="imageDisplay" alt="" />
                             </div>
+
+                        </div>
+                        <div class="field col-12">
+                            <label for="name">Additional Images</label>
+                            <input  [ngClass]="{'ng-dirty ng-invalid': limitFiles || multerError?.field==='additionalImages' }" (change)="uploadAdditionalImg($event)" [maxLength]="5" multiple type="file"
+                                class="p-inputtext" accept="image/*"  />
+                                <span class="text-danger" *ngIf="limitFiles">Please do not upload more then 5 images</span>
+                        <span class="text-danger" *ngIf="multerError?.field === 'additionalImages'">{{ multerError?.details }}</span>
+
+                           
+
+                    <div class="col-12 mt-2 pl-0">
+                        <div class="row">
+                            <div class="col-2" *ngFor="let img of imagesDisplay">
+                                <div class="position-relative">
+                                    <img class="img-fluid" [src]="img.url" alt="" />
+                                    <i class="pi pi-times trash-icon position-absolute top-0 end-0" (click)="removeImage(img)" ></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                         </div>
                     </div>
                 </form>

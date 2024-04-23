@@ -16,6 +16,8 @@ export class ProductDetailsComponent implements OnInit {
   id!: number
   quantity = 1
   cart!: any[]
+  selectedImg: any = ''
+  
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -28,6 +30,7 @@ export class ProductDetailsComponent implements OnInit {
     });
     orderService.getProduct(this.id).subscribe((res: any) => { 
       this.product = res.data;
+      this.selectedImg = this.product.image
     });
   }
   ngOnInit(): void {
@@ -52,6 +55,15 @@ export class ProductDetailsComponent implements OnInit {
       }) : this.cartService.addItemToCart(this.id, this.quantity, false);
     }
   }
+
+  selectImg(img: any) {
+   this.selectedImg = img.url 
+   
+  }
+  
+ isActive(img: any): boolean {
+   return this.selectedImg === img.url;
+}
 
 
 }
