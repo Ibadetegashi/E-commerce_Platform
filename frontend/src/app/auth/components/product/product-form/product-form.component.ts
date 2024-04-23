@@ -53,11 +53,6 @@ onUpload($event: FileUploadEvent) {
     });
     this.categoryOptions$ =  this.categoryService.getCategories()
     this.checkMode();
-    setTimeout(() => {
-    console.log('this.form.value.previewsImagesUrl INIT',this.form.value.previewsImagesUrl);
-    }, 500);
-    
-
   }
   
   createProduct() {
@@ -144,9 +139,6 @@ onUpload($event: FileUploadEvent) {
   }
   
   uploadAdditionalImg(event: any) {
-    console.log('this.form.value.Images before', this.form.value.Images);
-   
-
   this.limitFiles = false
   const files = event.target.files; 
   const totalImages = files.length  + this.imagesDisplay.length;
@@ -154,7 +146,6 @@ onUpload($event: FileUploadEvent) {
     this.limitFiles = true
     return;
   }
-  //this.form.patchValue({ Images: [...currentImages, ...files] });
     this.form.patchValue({ Images: [...this.form.value.Images, ...files] });
     console.log('patch values', this.form.value.Images);
 
@@ -166,8 +157,6 @@ onUpload($event: FileUploadEvent) {
       this.imagesDisplay.push(imageData);
     };
     fileReader.readAsDataURL(files[i]);
-    this.form.value.previewsImagesUrl = this.imagesDisplay.filter(image => !image.file)
-    console.log('this.form.value.Images after', this.form.value.Images);
     
     }
 }
@@ -205,18 +194,14 @@ onUpload($event: FileUploadEvent) {
     console.log(img);
     console.log();
     this.imagesDisplay = this.imagesDisplay.filter(image => image.url !== img.url);
-        this.form.value.previewsImagesUrl = this.imagesDisplay.filter(image => !image.file)
+      this.form.patchValue({
+        previewsImagesUrl : this.imagesDisplay.filter(image => !image.file)
+       })
 
-    console.log('this.form.value.Images before', this.form.value.Images);
-    
      if (img.file) { // Remove the new file uploaded
-       this.form.value.Images = this.form.value.Images.filter((image: any) => image !== img.file)
+       this.form.patchValue({
+         Images: this.form.value.Images.filter((image: any) => image !== img.file)
+       })
     }
-
-
-
-    console.log('this.form.value.Images',this.form.value.Images);
-    console.log('this.imagesDisplay', this.imagesDisplay);
-    console.log('this.form.value.previewsImagesUrl', this.form.value.previewsImagesUrl);
   }
 }
