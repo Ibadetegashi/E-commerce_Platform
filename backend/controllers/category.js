@@ -96,5 +96,31 @@ const editCategory = async (req, res) => {
         console.error(error);
         return res.status(500).send('Internal Server Error.');
     }
+
 }
-module.exports = { createCategory, getCategories, getCategoryById, deleteCategory, editCategory }
+
+const getSuggestedProducts = async (req, res) => {
+    try {
+        const products = await prisma.product.findMany({
+            take: 4,
+            orderBy: [
+                { createdAt: 'desc' },
+            ],
+            where: {
+                categoryId: +req.params.categoryId
+            }
+        })
+
+        res.json({ data: products})
+    } catch (error) {
+
+    }
+}
+module.exports = {
+    createCategory,
+    getCategories,
+    getCategoryById,
+    deleteCategory,
+    editCategory,
+    getSuggestedProducts
+}

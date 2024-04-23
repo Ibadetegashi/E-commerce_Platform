@@ -31,7 +31,8 @@ import { PaginatorModule } from 'primeng/paginator';
 import { UnavailableProductsModalComponent } from './partials/unavailable-products-modal/unavailable-products-modal.component';
 import { ReviewDetailsComponent } from './partials/review-details/review-details.component';
 import { RatingModule } from 'primeng/rating';
-import {AccordionModule} from 'primeng/accordion';
+import { AccordionModule } from 'primeng/accordion';
+import {ImageModule} from 'primeng/image';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -69,7 +70,8 @@ import {AccordionModule} from 'primeng/accordion';
     ConfirmDialogModule,
     PaginatorModule,
     RatingModule,
-    AccordionModule
+    AccordionModule,
+    ImageModule
     
   ],
   exports: [],

@@ -4,12 +4,13 @@ const {
     getCategories,
     getCategoryById,
     deleteCategory,
-    editCategory
+    editCategory,
+    getSuggestedProducts
 } = require('../controllers/category.js')
 
 const { createCategoryValidation } = require('../validation/productValidation.js')
 const { handleValidationErrors } = require('../middlewares/errorHandler.js')
-const { isAdmin } = require('../middlewares/verifyToken.js')
+const { isAdmin, isAuth } = require('../middlewares/verifyToken.js')
 
 
 router.post('/',
@@ -35,7 +36,7 @@ router.put('/:id',
     handleValidationErrors,
     editCategory)
 
-
+router.get('/product/:categoryId', isAuth, getSuggestedProducts)
 
 
 module.exports = router
