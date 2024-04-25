@@ -270,16 +270,23 @@ const deleteProduct = async (req, res) => {
 
 const getProductsPagination = async (req, res) => {
     try {
-        const { query: { page = 1, limit = 10, categoryName = '', search = '' } } = req;
+        const { query: { page = 1, limit = 10, categoryId , search = '', price = '' } } = req;
         const match = {};
-        // if (categoryId && categoryId !== 'null' && categoryId != undefined) {
-        //     match.categoryId = +categoryId;
-        // }
+        if (categoryId && categoryId != -1 && categoryId != undefined) {
+            match.categoryId = +categoryId;
+        }
         if (search) {
             match.OR = [
                 { name: { contains: search } },
                 { Category: { name: { contains: search } } }
             ];
+        }
+        if (price) {
+            const [from, to] = price.split('-').map(p => Number(p.trim())); // Parse "from-to" string
+            match.price = {
+                gte: from,
+                lte: to
+            };
         }
         console.log('match', match);
         const products = await prisma.product.findMany({
@@ -294,7 +301,8 @@ const getProductsPagination = async (req, res) => {
             }
         });
         const totalPages = Math.ceil((await prisma.product.count({ where: match })) / limit);
-        const totalRecords = Math.ceil(await prisma.product.count());
+        const totalRecords = Math.ceil(await prisma.product.count({where: match}));
+        
         if (!products || products.length === 0) {
             return res.status(404).json({ message: 'No Products Found.' });
         }
