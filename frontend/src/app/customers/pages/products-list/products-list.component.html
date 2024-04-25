@@ -1,12 +1,48 @@
 <p-toast></p-toast>
-<div class="products-page mt-5">
-    <div class="grid">
-        <div class="g-col-md-2 g-col-sm-6 d-flex justify-content-center gap-1 my-4 mx-auto"
-            *ngFor="let product of products">
-            <app-product-item [product]="product"></app-product-item>
+<div class="products-page mt-5 ">
+    <div class="row">
+        <div class="col-md-3 sticky-column">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Filter Options</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="categoryFilter">Category:</label>
+                        <p-dropdown *ngIf="categoryOptions$ | async as categoryOptions" [options]="categoryOptions"
+                            [(ngModel)]="selectedCategory" [showClear]="true" (onChange)="selectId($event)"
+                            optionLabel="name" placeholder="Select a category" [style]="{'width': '100%'}"></p-dropdown>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label for="priceFilter">Price Range:</label><br>
+                        <p-slider [(ngModel)]="rangeValues" (onSlideEnd)="onRangeValuesChange($event)" [range]="true"
+                            [min]="minPrice" [max]="maxPrice" [step]="5"></p-slider>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>{{rangeValues[0]}}</span>
+                            <span>{{rangeValues[1]}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn"  (click)="applyFilters()"> <i class="pi pi-filter"></i>Apply Filters</button>
+                    <!-- <button  class="btn ml-2"  (click)="removeFilters()"> <i class="pi pi-filter-slash"></i>Remove</button> -->
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-9">
+                <div *ngIf="message">{{message}}</div>
+                <div class="row" >
+                    <div class="col-md-3 mb-1"  *ngFor="let product of products"> 
+                    <app-product-item  [product]="product"></app-product-item>
+                    </div>
+                </div>  
         </div>
     </div>
-    <p-paginator  class="custom-paginator" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 20, 50]"
-        (onPageChange)="onPageChange($event)">
-    </p-paginator>
+    <div class="paginator-container">
+        <p-paginator class="custom-paginator bottom-0" [rows]="pageSize" [totalRecords]="totalRecords"
+            [rowsPerPageOptions]="[12, 24, 48]" (onPageChange)="onPageChange($event)">
+        </p-paginator>
+    </div>
 </div>

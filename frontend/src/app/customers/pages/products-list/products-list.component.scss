@@ -25,3 +25,21 @@
 :host ::ng-deep .p-dropdown-items-wrapper ul {
     padding: 0;
 }
+// .paginator-container {
+//     position: sticky;
+//     bottom: 0;
+//     left: 0;
+//     width: 100%;
+//     z-index: 1000;
+//    
+// }
+.sticky-column {
+    position: sticky;
+    top: 15px;
+    height: calc(100vh - 90px);
+    overflow-y: auto;
+}
+.btn {
+    background-color: var(--orange-600);
+    color: white;
+}

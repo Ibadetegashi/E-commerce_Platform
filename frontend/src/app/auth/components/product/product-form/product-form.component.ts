@@ -15,12 +15,6 @@ import { Category } from 'src/app/shared/interfaces/category';
   styleUrls: ['./product-form.component.scss']
 })
 export class ProductFormComponent implements OnInit{
-
-uploadedFiles: any;
-onUpload($event: FileUploadEvent) {
-  console.log($event);
-  console.log(this.uploadedFiles);
-}
   form!: FormGroup
   isEditMode = false
   categoryOptions$!:Observable<Category[]>

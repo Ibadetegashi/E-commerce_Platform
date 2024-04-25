@@ -32,7 +32,8 @@ import { UnavailableProductsModalComponent } from './partials/unavailable-produc
 import { ReviewDetailsComponent } from './partials/review-details/review-details.component';
 import { RatingModule } from 'primeng/rating';
 import { AccordionModule } from 'primeng/accordion';
-import {ImageModule} from 'primeng/image';
+import { ImageModule } from 'primeng/image';
+import { SliderModule } from 'primeng/slider';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -71,7 +72,8 @@ import {ImageModule} from 'primeng/image';
     PaginatorModule,
     RatingModule,
     AccordionModule,
-    ImageModule
+    ImageModule,
+    SliderModule
     
   ],
   exports: [],

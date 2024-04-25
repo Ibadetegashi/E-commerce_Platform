@@ -52,12 +52,16 @@ export class ProductService {
   // getProductsPagination(page: number , limit: number, categoryId: number , name: string) {
   //   return this.http.get(`${this.url}?page=${page}&limit=${limit}&categoryId=${categoryId}&name=${name}`)
   // }
-getProductsPagination(pageIndex: number, pageSize: number,search:string): Observable<any> {
+getProductsPagination(pageIndex: number, pageSize: number,search:string,categoryId:number, price:number[]): Observable<any> {
     let params = new HttpParams()
       .set('page', pageIndex.toString())
       .set('limit', pageSize.toString())
       .set('search', search)
-
+      .set('categoryId', categoryId.toString())
+  if (price && price.length === 2) {
+        params = params.set('price', price.join('-'));
+      }
+    
     return this.http.get(this.url, { params: params });
   }
 }
